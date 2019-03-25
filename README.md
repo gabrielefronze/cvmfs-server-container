@@ -1,5 +1,6 @@
-# CVMFS layer for Virgo
-This folder contains a working containerized installation of CVMFS aimed at providing a software distribution layer for the Virgo collaboration.
+# cvmfs_server-container: a containerized deplyment of CVMFS
+This folder contains a working containerized installation of CVMFS originally aimed at providing a software distribution layer for the Virgo collaboration.
+It's development has grown to a complete and general software that can be adopted in other contexts.
 
 This work is based on several previous efforts, even if running the CVMFS server (stratum0 and stratum1) in a container was found to be poorly documented.
 

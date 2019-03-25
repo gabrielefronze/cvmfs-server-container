@@ -1,0 +1,60 @@
+# This file is subject to the terms and conditions defined by
+# the Creative Commons BY-NC-CC standard and was developed by
+# Gabriele Gaetano Fronzé and Sara Vallero.
+# For abuse reports and other communications write to 
+# <gabriele.fronze at to.infn.it>
+
+version: "2"
+services:
+  cvmfs-client:
+    build:
+      context: ./cvmfs-client
+      dockerfile: Dockerfile
+    image: slidspitfire/cvmfs-client-latest:latest
+    container_name: cvmfs-client
+    hostname: cvmfs-client
+    privileged: true
+    env_file:
+      - cvmfs-variables.env
+    depends_on:
+      - cvmfs-stratum0
+      - cvmfs-stratum1
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup
+    tty: true
+
+  cvmfs-stratum1:
+    build:
+      context: ./cvmfs-stratum1
+      dockerfile: Dockerfile
+    image: slidspitfire/cvmfs-stratum1-latest:latest
+    container_name: cvmfs-stratum1
+    hostname: cvmfs-stratum1
+    privileged: true
+    env_file:
+      - cvmfs-variables.env
+    depends_on:
+      - cvmfs-stratum0
+    volumes:
+      - /var/cvmfs-docker/stratum1/var/spool/cvmfs:/var/spool/cvmfs
+      - /var/cvmfs-docker/stratum1/cvmfs:/cvmfs
+      - /var/cvmfs-docker/stratum1/srv/cvmfs:/srv/cvmfs
+      - /var/cvmfs-docker/stratum1/etc/cvmfs:/etc/cvmfs
+      - /sys/fs/cgroup:/sys/fs/cgroup
+
+  cvmfs-stratum0:
+    build:
+      context: ./cvmfs-stratum0
+      dockerfile: Dockerfile
+    image: slidspitfire/cvmfs-stratum0-latest:latest
+    container_name: cvmfs-stratum0
+    hostname: cvmfs-stratum0
+    privileged: true
+    env_file:
+      - cvmfs-variables.env
+    volumes:
+      - /var/cvmfs-docker/stratum0/var/spool/cvmfs:/var/spool/cvmfs
+      - /var/cvmfs-docker/stratum0/cvmfs:/cvmfs
+      - /var/cvmfs-docker/stratum0/srv/cvmfs:/srv/cvmfs
+      - /var/cvmfs-docker/stratum0/etc/cvmfs:/etc/cvmfs
+      - /sys/fs/cgroup:/sys/fs/cgroup

@@ -1,0 +1,32 @@
+# Created by cvmfs_server.  Don't touch.
+
+KeepAlive On
+AddType application/json .json
+# Translation URL to real pathname
+Alias /cvmfs/DUMMY_REPLACE_ME /srv/cvmfs/DUMMY_REPLACE_ME
+<Directory "/srv/cvmfs/DUMMY_REPLACE_ME">
+    Options -MultiViews
+    AllowOverride Limit AuthConfig
+    Require all granted
+
+    EnableMMAP Off
+    EnableSendFile Off
+
+    <FilesMatch "^\.cvmfs">
+        ForceType application/x-cvmfs
+    </FilesMatch>
+    <FilesMatch "^[^.]*$">
+        ForceType application/octet-stream
+    </FilesMatch>
+
+    # Avoid Last-Modified and If-Modified-Since because of squid bugs
+    Header unset Last-Modified
+    RequestHeader unset If-Modified-Since
+    FileETag None
+
+    ExpiresActive On
+    ExpiresDefault "access plus 3 days"
+    # 60 seconds and below is not cached at all by Squid default settings
+    ExpiresByType application/x-cvmfs "access plus 61 seconds"
+    ExpiresByType application/json    "access plus 61 seconds"
+</Directory>

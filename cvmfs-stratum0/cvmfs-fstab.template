@@ -1,0 +1,2 @@
+cvmfs2#DUMMY_REPLACE_ME /var/spool/cvmfs/DUMMY_REPLACE_ME/rdonly fuse allow_other,config=/etc/cvmfs/repositories.d/DUMMY_REPLACE_ME/client.conf:/var/spool/cvmfs/DUMMY_REPLACE_ME/client.local,cvmfs_suid,noauto 0 0 # added by CernVM-FS for DUMMY_REPLACE_ME
+overlay_DUMMY_REPLACE_ME /cvmfs/DUMMY_REPLACE_ME overlay upperdir=/var/spool/cvmfs/DUMMY_REPLACE_ME/scratch/current,lowerdir=/var/spool/cvmfs/DUMMY_REPLACE_ME/rdonly,workdir=/var/spool/cvmfs/DUMMY_REPLACE_ME/ofs_workdir,noauto,nodev,ro 0 0 # added by CernVM-FS for DUMMY_REPLACE_ME

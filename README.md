@@ -1,4 +1,4 @@
-# cvmfs_server-container: a containerized deplyment of CVMFS
+# `cvmfs_server_container`: a containerized deployment of CVMFS
 This folder contains a working containerized installation of CVMFS originally aimed at providing a software distribution layer for the Virgo collaboration.
 It's development has grown to a complete and general software that can be adopted in other contexts.
 

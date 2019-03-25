@@ -51,9 +51,6 @@ Once the container has been built the `cvmfs_server_container run [0/1]` will ru
 From now on the procedures are coherent with the `cvmfs_server` standard ones, hence `mkfs` creates a new repo, `trensaction` enables modifications, `publish` dues the equivalent to `git push` etc.
 As an addition the `mkfs-list` option is provided to instantiate several repositories at once with just the `-o root` option.
 
-## Recovering killed/pruned/renewed stratum-0 container on existing data
-As long as the data stored in the host's CVMFS root directory is not loss, the recovery can be accomplished by running the stratum-0 container via `cvmfs_server_container run 0` and then performing `cvmfs_server_container mount -a`. This command recovers and remounts all the repositories found in the host's CVMFS root directory.
-
 ## Networking requirements
 In a multi-host setup the stratum-0 instance and the stratum-1 instances require the hosting machines to have a mutually reachable IP address on which TCP port 8000 is opened.
 
@@ -78,14 +75,5 @@ This file has to be copied to the stratum-1 and client (in the same path, accord
 The `propagate-keys.sh` script is able to handle such task in the **single host** setup.
 To propagate the same procedure in a multi-host setup, homologous commands have to be executed on different machines.
 
-## How to handle crashes, container kills and prunes
-
-### **Stratum0 procedures**
-Some scripts are already installed in the `/etc/cvmfs-scripts` folder to tackle bizarre CVMFS behaviors in case of crashes and sudden shutdowns.
-
-In case of `docker container kill`, that is equivalent to a reboot of a physical machine, it is enough to execute the `/etc/cvmfs-scripts/restore-kill-start.sh` script to get back to working order.
-
-In case of `docker container kill &&  docker container prune`, that is equivalent to a replacement of the OS (aka fresh install), it is enough to execute the `/etc/cvmfs-scripts/restore-prune-start.sh` script to get back to working order without loosing any data.
-
-### **Stratum1 procedures**
-To be done...
+## Recovering killed/pruned/renewed stratum-0 container on existing data
+As long as the data stored in the host's CVMFS root directory is not loss, the recovery can be accomplished by running the stratum-0 container via `cvmfs_server_container run 0` and then performing `cvmfs_server_container mount -a`. This command recovers and remounts all the repositories found in the host's CVMFS root directory.

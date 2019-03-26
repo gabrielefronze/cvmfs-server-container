@@ -79,6 +79,9 @@ function cvmfs_server_container {
         docker build -t "$IMAGE_NAME" "$CVMFS_SERVER_LOCAL_GIT_REPO"/cvmfs-stratum"$STRATUM" >> build.log
         echo "done"
 
+        unset IMAGE_NAME
+        unset STRATUM
+
         ln -sf build.log last-operation.log
         ;;
 
@@ -104,10 +107,15 @@ function cvmfs_server_container {
         CVMFS_STRATUM_CONTAINER=cvmfs-stratum"$STRATUM"
         echo "done"
 
+        unset CVMFS_STRATUM_CONTAINER
+        unset IMAGE_NAME
+        unset STRATUM
+        unset HOST_CVMFS_ROOT_DIR
+
         ln -sf run.log last-operation.log
         ;;
 
-    # Option to switch the endpoint of CVMFS commands if both containers run locally on the same host
+    # Option to switch the endpoint of CVMFS commands if both containers running locally on the same host
     switch-str)
         if [[ ! $CVMFS_STRATUM_CONTAINER=="dummy" ]]; then
             if [[ $CVMFS_STRATUM_CONTAINER=="cvmfs-stratum0" ]]; then
@@ -155,8 +163,15 @@ function cvmfs_server_container {
                 echo "done"
             done
 
+            unset REPO_NAME_ARRAY
+            unset REQUIRED_REPOS_SUFFIX
+            unset REPO_NAME
+
             ln -sf initrepo.log last-operation.log
         fi
+
+        unset OPTIONS
+        unset REQUIRED_REPOS
         ;;
     
     # Option to recover the required repo[s] using the internal script
@@ -176,6 +191,9 @@ function cvmfs_server_container {
                 docker exec -ti "$CVMFS_STRATUM_CONTAINER" sh /etc/cvmfs-scripts/restore-repo.sh "$REPO_NAME" >> recover.log
                 echo "done"
             done
+
+            unset HOST_CVMFS_ROOT_DIR
+            unset REPO_NAME_ARRAY
         else
             REQUIRED_REPOS="$2"
             REPO_NAME_ARRAY=$(echo $REQUIRED_REPOS | tr "," "\n")
@@ -187,6 +205,11 @@ function cvmfs_server_container {
                 docker exec -ti "$CVMFS_STRATUM_CONTAINER" sh /etc/cvmfs-scripts/restore-repo.sh "$REPO_NAME" >> recover.log
                 echo "done"
             done
+
+            unset REPO_NAME_ARRAY
+            unset REQUIRED_REPOS_SUFFIX
+            unset REPO_NAME
+            unset REQUIRED_REPOS
         fi
         
         ln -sf recover.log last-operation.log
@@ -248,4 +271,6 @@ function cvmfs_server_container {
         ;;
 
     esac
+
+    unset MODE
 }

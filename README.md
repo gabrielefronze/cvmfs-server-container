@@ -26,7 +26,7 @@ The aim of such behavior is to be able to operate on the CVMFS repositories from
 
 Running the CVMFS servers inside containers is affected by the fact that containers are ephemeral by definition.
 For this reason the recovery of existing repositories after a reboot, on a physical machine, is as easy as calling `cvmfs_server mount -a`, while on a container the thing is a bit trickier.
-The picture gets even more complex in case the recovery has to be performed on a `prune`d container, that corresponds to a format of the OS disk or the replacement of a physical CFMS server.
+The picture gets even more complex in case the recovery has to be performed on a `prune`d container, that corresponds to a format of the OS disk or the replacement of a physical CVMFS server.
 
 The `cvmfs_server_container` shadows the standard `cvmfs_server` `mount` command, replacing it with a much stronger wrapper, able to recover from container prunes as well as undesired removal of CVMFS configuration files and entries.
 The `cvmfs_server_container mount` command guarantees the resilience needed to a CVMFS deployment in the form of containers.

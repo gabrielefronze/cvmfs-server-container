@@ -49,11 +49,12 @@ function cvmfs_server_container {
     case "$MODE" in
     # Clone the remote git repo locally
     get)
-        echo "Cloning git repo from $CVMFS_SERVER_GIT_URL in $CVMFS_SERVER_LOCAL_GIT_REPO... "
         if [[ ! -d "$CVMFS_SERVER_LOCAL_GIT_REPO"/.git ]]; then
+            echo "Cloning git repo from $CVMFS_SERVER_GIT_URL in $CVMFS_SERVER_LOCAL_GIT_REPO... "
             mkdir -p "$CVMFS_SERVER_LOCAL_GIT_REPO"
             git clone "$CVMFS_SERVER_GIT_URL" "$CVMFS_SERVER_LOCAL_GIT_REPO"
         else
+            echo "Pulling git repo from $CVMFS_SERVER_GIT_URL in $CVMFS_SERVER_LOCAL_GIT_REPO... "
             git --git-dir="$CVMFS_SERVER_LOCAL_GIT_REPO"/.git --work-tree="$CVMFS_SERVER_LOCAL_GIT_REPO" pull
         fi
         echo "done"

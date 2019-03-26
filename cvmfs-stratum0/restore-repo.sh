@@ -21,11 +21,18 @@ if [[ ! -f /etc/fstab ]]; then
 fi
 
 countFound=`grep -c "${REPO_NAME}" /etc/fstab`
+shouldBe=`grep -c DUMMY_REPLACE_ME /etc/cvmfs-scripts/cvmfs-fstab.template`
 
-if [[ "$countFound" == 0 ]]; then
-    echo "Recreating fstab entries for $REPO_NAME"
+if [[ "$countFound" < "$shouldBe" ]]; then
+    echo "Recreating fstab entries for $REPO_NAME... "
     cp /etc/cvmfs-scripts/cvmfs-fstab.template /etc/"$REPO_NAME"-fstab
     sed -i "s/DUMMY_REPLACE_ME/${REPO_NAME}/g" /etc/"$REPO_NAME"-fstab
+
+    if [[ ! "$countFound" == 0 ]]; then
+        echo "Removing leftaround in fstab to add a new and clean entry.. "
+        sed -i "/${REPO_NAME}/d" /etc/fstab
+    fi
+
     (cat /etc/"$REPO_NAME"-fstab; echo) >> /etc/fstab
     rm -f /etc/"$REPO_NAME"-fstab
 
@@ -39,7 +46,7 @@ echo "Unmounting $REPO_NAME left arounds..."
 umount overlay_"$REPO_NAME"
 umount /dev/fuse
 
-# Eventually remove transaction locks left dangling: the above mounts happen to be read-only
+# Eventually remove transaction locks left dangling since everything will be mounted read-only
 if [[ -f /var/spool/cvmfs/"$REPO_NAME"/in_transaction.lock ]]; then
     echo "Removing transaction locks..."
     rm -f /var/spool/cvmfs/"$REPO_NAME"/in_transaction.lock

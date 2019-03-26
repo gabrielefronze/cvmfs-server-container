@@ -18,14 +18,19 @@ function prompt_stratum_selection {
         if [[ $(docker ps | grep -c "cvmfs-stratum0") == 1 ]]; then
             if [[ $(docker ps | grep -c "cvmfs-stratum1") == 1 ]]; then
                 read -p "Both stratum0 and stratum1 are running. Please enter [0/1]: " strindex
+
                 case "$strindex" in
                 0)
                     CVMFS_STRATUM_CONTAINER="cvmfs-stratum0"
+                    ;;
                 1)
                     CVMFS_STRATUM_CONTAINER="cvmfs-stratum1"
+                    ;;
                 *)
                     echo "FATAL: Unsupported option. Please use [0/1]"
                     exit 1
+                    ;;
+                esac
             else
                 CVMFS_STRATUM_CONTAINER="cvmfs-stratum0"
             fi

@@ -74,7 +74,7 @@ function cvmfs_server_container {
         IMAGE_NAME="$CVMFS_CONTAINER_BASE_IMAGE_NAME""$STRATUM"-base
 
         echo -n "Building cvmfs stratum$STRATUM base image with name $IMAGE_NAME... "
-        docker build -t "$IMAGE_NAME" "$CVMFS_SERVER_LOCAL_GIT_REPO"/cvmfs/cvmfs-stratum"$STRATUM" >> build.log
+        docker build -t "$IMAGE_NAME" "$CVMFS_SERVER_LOCAL_GIT_REPO"/cvmfs-stratum"$STRATUM" >> build.log
         echo "done"
 
         ln -sf build.log last-operation.log
@@ -98,7 +98,7 @@ function cvmfs_server_container {
 
         echo "Running cvmfs stratum$STRATUM docker container as $CVMFS_STRATUM_CONTAINER with:"
         echo -e "\t- Host cvmfs dir = $HOST_CVMFS_ROOT_DIR"
-        sh "$CVMFS_SERVER_LOCAL_GIT_REPO"/cvmfs/cvmfs-stratum"$STRATUM"/Dockerrun-args.sh "$HOST_CVMFS_ROOT_DIR" "$IMAGE_NAME" >> run.log
+        sh "$CVMFS_SERVER_LOCAL_GIT_REPO"/cvmfs-stratum"$STRATUM"/Dockerrun-args.sh "$HOST_CVMFS_ROOT_DIR" "$IMAGE_NAME" >> run.log
         CVMFS_STRATUM_CONTAINER=cvmfs-stratum"$STRATUM"
         echo "done"
 

@@ -231,7 +231,7 @@ function cvmfs_server_container {
         echo "                  Runs the stratum[0/1] container as cvmfs-stratum[0/1]."
         echo "  switch-str      Allows to switch between redirecting commands to "
         echo "                  stratum0 or stratum1, if deployed on the same host."
-        echo "  mkfs            [-w stratum0 url] [-u upstream storage] [-o owner]"
+        echo "  mkfs            [-o owner=root] [-w stratum0 url] [-u upstream storage]"
         echo "                  [-m replicable] [-f union filesystem type] [-s S3 config file]"
         echo "                  [-g disable auto tags] [-G Set timespan for auto tags]"
         echo "                  [-a hash algorithm (default: SHA-1)]"

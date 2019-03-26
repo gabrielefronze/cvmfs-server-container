@@ -56,6 +56,7 @@ function cvmfs_server_container {
         else
             echo "Pulling git repo from $CVMFS_SERVER_GIT_URL in $CVMFS_SERVER_LOCAL_GIT_REPO... "
             git --git-dir="$CVMFS_SERVER_LOCAL_GIT_REPO"/.git --work-tree="$CVMFS_SERVER_LOCAL_GIT_REPO" pull
+            source "$CVMFS_SERVER_LOCAL_GIT_REPO"/$(basename $BASH_SOURCE)
         fi
         echo "done"
         ;;

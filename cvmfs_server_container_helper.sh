@@ -81,7 +81,7 @@ function cvmfs_server_container {
             if [[ $CVMFS_STRATUM_CONTAINER=="cvmfs-stratum0" ]]; then
                 echo "Switching to stratum1... done"
                 CVMFS_STRATUM_CONTAINER=="cvmfs-stratum1"
-            else if [[ $CVMFS_STRATUM_CONTAINER=="cvmfs-stratum1" ]]; then
+            elif [[ $CVMFS_STRATUM_CONTAINER=="cvmfs-stratum1" ]]; then
                 echo "Switching to stratum0... done"
                 CVMFS_STRATUM_CONTAINER=="cvmfs-stratum0"
             else

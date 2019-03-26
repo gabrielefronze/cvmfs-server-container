@@ -137,7 +137,7 @@ function cvmfs_server_container {
         OPTIONS="${@:1:$#-1}"
 
         if [[ -z "$OPTIONS" ]] || [[ ! $(echo "$OPTIONS" | grep -q "\-o root") ]]; then
-            OPTIONS="-o root"
+            OPTIONS="-o root ""$OPTIONS"
         fi
 
         if [[ -z "$REQUIRED_REPOS" ]]; then

@@ -133,17 +133,23 @@ function cvmfs_server_container {
 
         prompt_stratum_selection
 
-        if [[ -z "$2" ]]; then
+        REQUIRED_REPOS="${@: -1}"
+        OPTIONS="${@:1:$#-1}"
+
+        if [[ -z "$OPTIONS" || ! grep -q "-o root" "$OPTIONS" ]]; then
+            OPTIONS="-o root"
+        fi
+
+        if [[ -z "$REQUIRED_REPOS" ]]; then
             echo "FATAL: no repository name provided."
             exit 7
         else
-            REQUIRED_REPOS="$2"
             REPO_NAME_ARRAY=$(echo $REQUIRED_REPOS | tr "," "\n")
             REQUIRED_REPOS_SUFFIX=$(echo $REQUIRED_REPOS | sed 's/\,/-/')
 
             for REPO_NAME in $REPO_NAME_ARRAY
             do
-                echo -n "Initializing $REPO_NAME repository in $CVMFS_STRATUM_CONTAINER container... "
+                echo -n "Initializing $REPO_NAME repository in $CVMFS_STRATUM_CONTAINER container with options: $OPTIONS ... "
                 docker exec -ti "$CVMFS_STRATUM_CONTAINER" cvmfs_server mkfs -o root "$REPO_NAME" >> initrepo.log
                 docker exec -ti "$CVMFS_STRATUM_CONTAINER" cvmfs_server check "$REPO_NAME" >> initrepo.log
                 echo "done"

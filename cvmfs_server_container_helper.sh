@@ -136,7 +136,7 @@ function cvmfs_server_container {
         ;;
 
     # Option to initialize the required repo[s] using the internal script and committing the new image on top of the existing
-    mkfs-list)
+    mkfs)
         rm -f initrepo.log
 
         prompt_stratum_selection
@@ -224,29 +224,38 @@ function cvmfs_server_container {
         echo
         echo "Supported commands:\n"
         echo
-        echo "  get          Clone the git repo locally"
-        echo "  build        [0/1]"
-        echo "               Build the stratum[0/1] container image"
-        echo "  run          [0/1]"
-        echo "               Runs the stratum[0/1] container as cvmfs-stratum[0/1]."
-        echo "  switch-str   Allows to switch between redirecting commands to "
-        echo "               stratum0 or stratum1, if deployed on the same host."
-        echo "  mkfs-list    <fully qualified repository name>,"
-        echo "               [fully qualified repository name],..."
-        echo "               Configures the running container"
-        echo "               to host the provided repo or list"
-        echo "               of repos with root as owner."
-        echo "  mount        [-a]"
-        echo "               Mounts all the repositories found in"
-        echo "               the host root path, automatically recovering"
-        echo "               from crashes and shutdowns."
-        echo "  mount        <fully qualified repository name>,"
-        echo "               [fully qualified repository name],..."
-        echo "               Mounts the specified repo or list of repos,"
-        echo "               automatically recovering them from crashes,"
-        echo "               container prunes and shutdowns."
+        echo "  get             Clone the git repo locally"
+        echo "  build           [0/1]"
+        echo "                  Build the stratum[0/1] container image"
+        echo "  run             [0/1]"
+        echo "                  Runs the stratum[0/1] container as cvmfs-stratum[0/1]."
+        echo "  switch-str      Allows to switch between redirecting commands to "
+        echo "                  stratum0 or stratum1, if deployed on the same host."
+        echo "  mkfs            [-w stratum0 url] [-u upstream storage] [-o owner]"
+        echo "                  [-m replicable] [-f union filesystem type] [-s S3 config file]"
+        echo "                  [-g disable auto tags] [-G Set timespan for auto tags]"
+        echo "                  [-a hash algorithm (default: SHA-1)]"
+        echo "                  [-z enable garbage collection] [-v volatile content]"
+        echo "                  [-Z compression algorithm (default: zlib)]"
+        echo "                  [-k path to existing keychain] [-p no apache config]"
+        echo "                  [-R require masterkeycard key ]"
+        echo "                  [-V VOMS authorization] [-X (external data)]"
+        echo "                  <fully qualified repository name>,"
+        echo "                  [fully qualified repository name],..."
+        echo "                  Configures the running container"
+        echo "                  to host the provided comma-separed repo or list"
+        echo "                  of repos always setting root as owner."
+        echo "  mount           [-a]"
+        echo "                  Mounts all the repositories found in"
+        echo "                  the host root path, automatically recovering"
+        echo "                  from crashes and shutdowns."
+        echo "  mount           <fully qualified repository name>,"
+        echo "                  [fully qualified repository name],..."
+        echo "                  Mounts the specified repo or list of repos,"
+        echo "                  automatically recovering them from crashes,"
+        echo "                  container prunes and shutdowns."
         echo
-        docker exec -ti "$CVMFS_STRATUM_CONTAINER" cvmfs_server help | awk 'NR>5'| awk '!/^NOTE:/' | awk '!/^  mount/' | awk '!/^                  Mount/' 
+        docker exec -ti "$CVMFS_STRATUM_CONTAINER" cvmfs_server help | awk 'NR>5'| awk '!/^NOTE:/' | awk '!/^  mount/' | awk '!/^                  Mount/' | sed '/add-replica/,$!d'
         echo "________________________________________________________________________"
         echo
         ;;

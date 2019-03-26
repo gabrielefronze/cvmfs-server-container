@@ -54,7 +54,7 @@ function cvmfs_server_container {
             mkdir -p "$CVMFS_SERVER_LOCAL_GIT_REPO"
             git clone "$CVMFS_SERVER_GIT_URL" "$CVMFS_SERVER_LOCAL_GIT_REPO"
         else
-            git pull "$CVMFS_SERVER_LOCAL_GIT_REPO"
+            git --git-dir="$CVMFS_SERVER_LOCAL_GIT_REPO"/.git --work-tree="$CVMFS_SERVER_LOCAL_GIT_REPO" pull
         fi
         echo "done"
         ;;

@@ -13,13 +13,38 @@ export CVMFS_CONTAINER_BASE_IMAGE_NAME=slidspitfire/cvmfs-stratum
 export CVMFS_STRATUM_CONTAINER="dummy"
 export DEFAULT_HOST_CVMFS_ROOT_DIR=/var/cvmfs-docker/stratum0
 
+function prompt_stratum_selection {
+    if [[ "$CVMFS_STRATUM_CONTAINER"=="dummy" ]]; then
+        if [[ $(docker ps | grep -c "cvmfs-stratum0") >= 1 ]]; then
+            if [[ $(docker ps | grep -c "cvmfs-stratum1") >= 1 ]]; then
+                read -p "Both stratum0 and stratum1 are running. Please enter [0/1]: " strindex
+                case "$strindex" in
+                0)
+                    CVMFS_STRATUM_CONTAINER="cvmfs-stratum0"
+                1)
+                    CVMFS_STRATUM_CONTAINER="cvmfs-stratum1"
+                *)
+                    echo "FATAL: Unsupported option. Please use [0/1]"
+                    exit 1
+            else
+                CVMFS_STRATUM_CONTAINER="cvmfs-stratum0"
+            fi
+        elif [[ $(docker ps | grep -c "cvmfs-stratum1") >= 1 ]]; then
+            CVMFS_STRATUM_CONTAINER="cvmfs-stratum1"
+        else
+            echo "FATAL: No cvmfs cotnainer found. Please run it or manually set the CVMFS_STRATUM_CONTAINER environment variable."
+            exit 2
+        fi
+    fi
+}
+
 function cvmfs_server_container {
     MODE=$1
 
     case "$MODE" in
     # Clone the remote git repo locally
     get)
-        echo -n "Cloning git repo from $CVMFS_SERVER_GIT_URL in $CVMFS_SERVER_LOCAL_GIT_REPO... "
+        echo "Cloning git repo from $CVMFS_SERVER_GIT_URL in $CVMFS_SERVER_LOCAL_GIT_REPO... "
         if [[ ! -d "$CVMFS_SERVER_LOCAL_GIT_REPO"/.git ]]; then
             mkdir -p "$CVMFS_SERVER_LOCAL_GIT_REPO"
             git clone "$CVMFS_SERVER_GIT_URL" "$CVMFS_SERVER_LOCAL_GIT_REPO"
@@ -38,7 +63,7 @@ function cvmfs_server_container {
             STRATUM="$2"
         else
             echo "FATAL: provided option $2 not recognized. Please select [0/1]."
-            exit 1
+            exit 3
         fi
 
         IMAGE_NAME="$CVMFS_CONTAINER_BASE_IMAGE_NAME""$STRATUM"-base
@@ -61,7 +86,7 @@ function cvmfs_server_container {
             STRATUM="$2"
         else
             echo "FATAL: provided option $2 not recognized. Please select [0/1]."
-            exit 1
+            exit 4
         fi
 
         IMAGE_NAME="$CVMFS_CONTAINER_BASE_IMAGE_NAME""$STRATUM"-base
@@ -87,11 +112,11 @@ function cvmfs_server_container {
             else
                 echo "FATAL: env variable CVMFS_STRATUM_CONTAINER=$CVMFS_STRATUM_CONTAINER does not refer to any runnign container."
                 echo "       Please manually export the name of the CVMFS cotnainer via 'export CVMFS_STRATUM_CONTAINER=<container-name>'."
-                exit 1
+                exit 5
             fi
         else
             echo "FATAL: no running CVMFS stratum containers."
-            exit 1
+            exit 6
         fi
         ;;
 
@@ -99,9 +124,11 @@ function cvmfs_server_container {
     mkfs-list)
         rm -f initrepo.log
 
+        prompt_stratum_selection
+
         if [[ -z "$2" ]]; then
             echo "FATAL: no repository name provided."
-            exit 1
+            exit 7
         else
             REQUIRED_REPOS="$2"
             REPO_NAME_ARRAY=$(echo $REQUIRED_REPOS | tr "," "\n")
@@ -122,6 +149,8 @@ function cvmfs_server_container {
     # Option to recover the required repo[s] using the internal script
     mount)
         rm -f recover.log
+
+        prompt_stratum_selection
 
         if [[ "$2" == "-a" || -z "$2" ]]; then
             HOST_CVMFS_ROOT_DIR=${3:-"$DEFAULT_HOST_CVMFS_ROOT_DIR"}
@@ -151,7 +180,8 @@ function cvmfs_server_container {
         ;;
 
     # Help option
-    help)   
+    help)
+        prompt_stratum_selection
         echo "CernVM-FS Container Server Tool\n"
         echo
         echo "Usage: cvmfs_server_container COMMAND [options] <parameters>\n"
@@ -187,6 +217,8 @@ function cvmfs_server_container {
     
     # Option to forward commands to cvmfs_server software running inside the container
     *)  
+        prompt_stratum_selection
+
         CVMFS_REPO_NAME="$2"
 
         docker exec -ti "$CVMFS_STRATUM_CONTAINER" cvmfs_server "$@"

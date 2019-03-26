@@ -15,8 +15,8 @@ export DEFAULT_HOST_CVMFS_ROOT_DIR=/var/cvmfs-docker/stratum0
 
 function prompt_stratum_selection {
     if [[ "$CVMFS_STRATUM_CONTAINER"=="dummy" ]]; then
-        if [[ $(docker ps | grep -c "cvmfs-stratum0") >= 1 ]]; then
-            if [[ $(docker ps | grep -c "cvmfs-stratum1") >= 1 ]]; then
+        if [[ $(docker ps | grep -c "cvmfs-stratum0") == 1 ]]; then
+            if [[ $(docker ps | grep -c "cvmfs-stratum1") == 1 ]]; then
                 read -p "Both stratum0 and stratum1 are running. Please enter [0/1]: " strindex
                 case "$strindex" in
                 0)
@@ -29,7 +29,7 @@ function prompt_stratum_selection {
             else
                 CVMFS_STRATUM_CONTAINER="cvmfs-stratum0"
             fi
-        elif [[ $(docker ps | grep -c "cvmfs-stratum1") >= 1 ]]; then
+        elif [[ $(docker ps | grep -c "cvmfs-stratum1") == 1 ]]; then
             CVMFS_STRATUM_CONTAINER="cvmfs-stratum1"
         else
             echo "FATAL: No cvmfs cotnainer found. Please run it or manually set the CVMFS_STRATUM_CONTAINER environment variable."

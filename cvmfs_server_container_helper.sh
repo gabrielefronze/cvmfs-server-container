@@ -254,7 +254,6 @@ function cvmfs_server_container {
         echo "                  Mounts the specified repo or list of repos,"
         echo "                  automatically recovering them from crashes,"
         echo "                  container prunes and shutdowns."
-        echo
         docker exec -ti "$CVMFS_STRATUM_CONTAINER" cvmfs_server help | awk 'NR>5'| awk '!/^NOTE:/' | awk '!/^  mount/' | awk '!/^                  Mount/' | sed '/add-replica/,$!d'
         echo "________________________________________________________________________"
         echo

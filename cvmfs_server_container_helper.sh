@@ -134,7 +134,7 @@ function cvmfs_server_container {
         prompt_stratum_selection
 
         REQUIRED_REPOS="${@: -1}"
-        OPTIONS="${@:1:$#-1}"
+        OPTIONS="${@:2:$#-1}"
 
         if [[ -z "$OPTIONS" ]] || [[ ! $(echo "$OPTIONS" | grep -q "\-o root") ]]; then
             OPTIONS="-o root ""$OPTIONS"

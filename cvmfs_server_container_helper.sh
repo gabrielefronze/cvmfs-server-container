@@ -11,7 +11,7 @@ export CVMFS_SERVER_GIT_URL=https://github.com/gabrielefronze/cvmfs-server-conta
 export CVMFS_SERVER_LOCAL_GIT_REPO=~/cvmfs-server-container
 export CVMFS_CONTAINER_BASE_IMAGE_NAME=slidspitfire/cvmfs-stratum
 export CVMFS_STRATUM_CONTAINER="dummy"
-export DEFAULT_HOST_CVMFS_ROOT_DIR=/scratch/cvmfs-docker/stratum0
+export DEFAULT_HOST_CVMFS_ROOT_DIR=/scratch/cvmfs-docker
 export CVMFS_LOG_DIR=/var/log/cvmfs-server-container
 
 if [[ ! -d "$CVMFS_LOG_DIR" ]]; then
@@ -42,7 +42,7 @@ function prompt_stratum_selection {
         elif [[ $(docker ps | grep -c "cvmfs-stratum1") == 1 ]]; then
             CVMFS_STRATUM_CONTAINER="cvmfs-stratum1"
         else
-            echo "FATAL: No cvmfs cotnainer found. Please run it or manually set the CVMFS_STRATUM_CONTAINER environment variable."
+            echo "FATAL: No cvmfs container found. Please run it or manually set the CVMFS_STRATUM_CONTAINER environment variable."
             exit 1
         fi
     fi
@@ -94,7 +94,6 @@ function cvmfs_server_container {
     run)    
         rm -f "$CVMFS_LOG_DIR"/run.log
 
-        HOST_CVMFS_ROOT_DIR=${3:-"$DEFAULT_HOST_CVMFS_ROOT_DIR"}
         STRATUM="dummy"
 
         if [[ ( ! -z $2 ) && ( "$2"==0 || "$2"==1 )]]; then
@@ -104,18 +103,21 @@ function cvmfs_server_container {
             exit 1
         fi
 
+        CVMFS_STRATUM_CONTAINER=cvmfs-stratum"$STRATUM"
+
+        HOST_CVMFS_DATA_DIR=${3:-"$DEFAULT_HOST_CVMFS_ROOT_DIR"/"$CVMFS_STRATUM_CONTAINER"}
+
         IMAGE_NAME="$CVMFS_CONTAINER_BASE_IMAGE_NAME""$STRATUM"-base
 
         echo "Running cvmfs stratum$STRATUM docker container as $CVMFS_STRATUM_CONTAINER with:"
-        echo -e "\t- Host cvmfs dir = $HOST_CVMFS_ROOT_DIR"
-        sh "$CVMFS_SERVER_LOCAL_GIT_REPO"/cvmfs-stratum"$STRATUM"/Dockerrun-args.sh "$HOST_CVMFS_ROOT_DIR" "$IMAGE_NAME" >> "$CVMFS_LOG_DIR"/run.log
-        CVMFS_STRATUM_CONTAINER=cvmfs-stratum"$STRATUM"
+        echo -e "\t- Host cvmfs dir = $HOST_CVMFS_DATA_DIR"
+        sh "$CVMFS_SERVER_LOCAL_GIT_REPO"/cvmfs-stratum"$STRATUM"/Dockerrun-args.sh "$HOST_CVMFS_DATA_DIR" "$IMAGE_NAME" >> "$CVMFS_LOG_DIR"/run.log
         echo "done"
 
         unset CVMFS_STRATUM_CONTAINER
         unset IMAGE_NAME
         unset STRATUM
-        unset HOST_CVMFS_ROOT_DIR
+        unset HOST_CVMFS_DATA_DIR
 
         ln -sf "$CVMFS_LOG_DIR"/run.log "$CVMFS_LOG_DIR"/last-operation.log
         ;;
@@ -186,9 +188,9 @@ function cvmfs_server_container {
         prompt_stratum_selection
 
         if [[ "$2" == "-a" || -z "$2" ]]; then
-            HOST_CVMFS_ROOT_DIR=${3:-"$DEFAULT_HOST_CVMFS_ROOT_DIR"}
+            HOST_CVMFS_DATA_DIR=${3:-"$DEFAULT_HOST_CVMFS_ROOT_DIR"/"$CVMFS_STRATUM_CONTAINER"}
 
-            REPO_NAME_ARRAY=$(ls $HOST_CVMFS_ROOT_DIR/srv-cvmfs/ | tr " " "\n" | sed "/info/d")
+            REPO_NAME_ARRAY=$(ls $HOST_CVMFS_DATA_DIR/srv-cvmfs/ | tr " " "\n" | sed "/info/d")
 
             for REPO_NAME in $REPO_NAME_ARRAY
             do
@@ -197,7 +199,7 @@ function cvmfs_server_container {
                 echo "done"
             done
 
-            unset HOST_CVMFS_ROOT_DIR
+            unset HOST_CVMFS_DATA_DIR
             unset REPO_NAME_ARRAY
         else
             REQUIRED_REPOS="$2"
@@ -206,7 +208,7 @@ function cvmfs_server_container {
 
             for REPO_NAME in $REPO_NAME_ARRAY
             do
-                echo -n "Recovering $REPO_NAME repository in "$CVMFS_STRATUM_CONTAINER" container... "
+                echo -n "Recovering $REPO_NAME repository in $CVMFS_STRATUM_CONTAINER container... "
                 docker exec -ti "$CVMFS_STRATUM_CONTAINER" sh /etc/cvmfs-scripts/restore-repo.sh "$REPO_NAME" >> "$CVMFS_LOG_DIR"/recover.log
                 echo "done"
             done

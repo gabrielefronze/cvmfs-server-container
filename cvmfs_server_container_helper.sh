@@ -43,7 +43,7 @@ function prompt_stratum_selection {
             CVMFS_STRATUM_CONTAINER="cvmfs-stratum1"
         else
             echo "FATAL: No cvmfs cotnainer found. Please run it or manually set the CVMFS_STRATUM_CONTAINER environment variable."
-            exit 2
+            exit 1
         fi
     fi
 }
@@ -75,7 +75,7 @@ function cvmfs_server_container {
             STRATUM="$2"
         else
             echo "FATAL: provided option $2 not recognized. Please select [0/1]."
-            exit 3
+            exit 1
         fi
 
         echo -n "Building cvmfs stratum$STRATUM base image with name $IMAGE_NAME... "
@@ -101,7 +101,7 @@ function cvmfs_server_container {
             STRATUM="$2"
         else
             echo "FATAL: provided option $2 not recognized. Please select [0/1]."
-            exit 4
+            exit 1
         fi
 
         IMAGE_NAME="$CVMFS_CONTAINER_BASE_IMAGE_NAME""$STRATUM"-base
@@ -132,11 +132,11 @@ function cvmfs_server_container {
             else
                 echo "FATAL: env variable CVMFS_STRATUM_CONTAINER=$CVMFS_STRATUM_CONTAINER does not refer to any runnign container."
                 echo "       Please manually export the name of the CVMFS cotnainer via 'export CVMFS_STRATUM_CONTAINER=<container-name>'."
-                exit 5
+                exit 1
             fi
         else
             echo "FATAL: no running CVMFS stratum containers."
-            exit 6
+            exit 1
         fi
         ;;
 
@@ -155,7 +155,7 @@ function cvmfs_server_container {
 
         if [[ -z "$REQUIRED_REPOS" ]]; then
             echo "FATAL: no repository name provided."
-            exit 7
+            exit 1
         else
             REPO_NAME_ARRAY=$(echo $REQUIRED_REPOS | tr "," "\n")
             REQUIRED_REPOS_SUFFIX=$(echo $REQUIRED_REPOS | sed 's/\,/-/')

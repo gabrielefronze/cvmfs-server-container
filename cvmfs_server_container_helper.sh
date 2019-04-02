@@ -75,7 +75,7 @@ function cvmfs_server_container {
 
         echo -n "Building cvmfs stratum$STRATUM base image with name $IMAGE_NAME... "
         docker build -t "$CVMFS_CONTAINER_BASE_IMAGE_NAME"0-base "$CVMFS_SERVER_LOCAL_GIT_REPO"/cvmfs-stratum0 >> build.log
-        if [[ "$STRATUM"==1]]; then
+        if [[ "$STRATUM"==1 ]]; then
             docker build -t "$CVMFS_CONTAINER_BASE_IMAGE_NAME"1-base "$CVMFS_SERVER_LOCAL_GIT_REPO"/cvmfs-stratum1 >> build.log
         fi
         echo "done"

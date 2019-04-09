@@ -78,3 +78,9 @@ To propagate the same procedure in a multi-host setup, homologous commands have 
 
 ## Recovering killed/pruned/renewed stratum-0 container on existing data
 As long as the data stored in the host's CVMFS root directory is not loss, the recovery can be accomplished by running the stratum-0 container via `cvmfs_server_container run 0` and then performing `cvmfs_server_container mount -a`. This command recovers and remounts all the repositories found in the host's CVMFS root directory.
+
+## About squid proxy
+A containerized frontier proxy is available within this repository.
+It is customized for my own test env, but it is easily modified for other environments.
+
+I recommend to modify the `squid.conf` file since at the moment it is unprotected from malicious attacks (since `http_access allow all` is present).

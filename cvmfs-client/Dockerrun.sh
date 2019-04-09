@@ -5,6 +5,5 @@ docker run -t \
 --name cvmfs-client \
 --hostname cvmfs-client \
 --privileged \
---env-file ../cvmfs-variables.env \
 --volume /sys/fs/cgroup:/sys/fs/cgroup \
 slidspitfire/cvmfs-client-latest:latest

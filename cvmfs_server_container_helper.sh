@@ -79,7 +79,7 @@ function cvmfs_server_container {
         fi
 
         echo -n "Building base cvmfs-server image... "
-        docker build -t cvmfs-server-base "$CVMFS_SERVER_LOCAL_GIT_REPO"/cvmfs-server-base >> "$CVMFS_LOG_DIR"/build.log
+        docker build -t slidspitfire/cvmfs-server-base "$CVMFS_SERVER_LOCAL_GIT_REPO"/cvmfs-server-base >> "$CVMFS_LOG_DIR"/build.log
         echo "done"
 
         echo -n "Building cvmfs stratum$STRATUM base image with name $CVMFS_CONTAINER_BASE_IMAGE_NAME$STRATUM-base... "

@@ -15,7 +15,10 @@ RUN wget https://ecsft.cern.ch/dist/cvmfs/cvmfs-gateway-0.3.1/cvmfs-gateway-0.3.
 RUN yum install -y yum install cvmfs-gateway-0.3.1-1.el7.x86_64.rpm
 RUN rm -rf yum install cvmfs-gateway-0.3.1-1.el7.x86_64.rpm
 
+RUN systemctl start cvmfs-gateway.service
 RUN systemctl enable cvmfs-gateway.service
 
 EXPOSE 80
 EXPOSE 4929
+
+CMD ["/usr/sbin/init"]

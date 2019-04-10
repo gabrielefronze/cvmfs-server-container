@@ -78,11 +78,12 @@ function cvmfs_server_container {
             exit 1
         fi
 
+        echo -n "Building base cvmfs-server image... "
+        docker build -t cvmfs-server-base "$CVMFS_SERVER_LOCAL_GIT_REPO"/cvmfs-server-base >> "$CVMFS_LOG_DIR"/build.log
+        echo "done"
+
         echo -n "Building cvmfs stratum$STRATUM base image with name $CVMFS_CONTAINER_BASE_IMAGE_NAME$STRATUM-base... "
-        docker build -t "$CVMFS_CONTAINER_BASE_IMAGE_NAME"0-base "$CVMFS_SERVER_LOCAL_GIT_REPO"/cvmfs-stratum0 >> "$CVMFS_LOG_DIR"/build.log
-        if [[ "$STRATUM"==1 ]]; then
-            docker build -t "$CVMFS_CONTAINER_BASE_IMAGE_NAME"1-base "$CVMFS_SERVER_LOCAL_GIT_REPO"/cvmfs-stratum1 >> "$CVMFS_LOG_DIR"/build.log
-        fi
+        docker build -t "$CVMFS_CONTAINER_BASE_IMAGE_NAME""$STRATUM"-base "$CVMFS_SERVER_LOCAL_GIT_REPO"/cvmfs-stratum"$STRATUM" >> "$CVMFS_LOG_DIR"/build.log
         echo "done"
 
         unset STRATUM

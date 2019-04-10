@@ -20,9 +20,17 @@ RUN rm -rf cvmfs-release-latest.noarch.rpm
 RUN yum install -y cvmfs cvmfs-server
 RUN echo "CVMFS_HTTP_PROXY=DIRECT" > /etc/cvmfs/default.local
 
+RUN wget https://ecsft.cern.ch/dist/cvmfs/cvmfs-gateway-0.3.1/cvmfs-gateway-0.3.1-1.el7.x86_64.rpm
+RUN yum install -y yum install cvmfs-gateway-0.3.1-1.el7.x86_64.rpm
+RUN rm -rf yum install cvmfs-gateway-0.3.1-1.el7.x86_64.rpm
+RUN systemctl enable cvmfs-gateway.service
+
 RUN systemctl enable httpd.service
 RUN sed '/Listen 80/ a Listen 8000' -i /etc/httpd/conf/httpd.conf
 EXPOSE 8000
+
+EXPOSE 80
+EXPOSE 4929
 
 RUN mkdir /etc/cvmfs-scripts
 COPY restore-repo.sh /etc/cvmfs-scripts

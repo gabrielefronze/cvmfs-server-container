@@ -6,3 +6,5 @@
 # <gabriele.fronze at to.infn.it>
 
 FROM slidspitfire/cvmfs-server-base:latest
+
+CMD ["/usr/sbin/init"]

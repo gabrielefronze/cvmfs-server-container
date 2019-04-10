@@ -5,7 +5,7 @@
 # For abuse reports and other communications write to 
 # <gabriele.fronze at to.infn.it>
 
-CVMFS_ROOT_DIR=/scratch/cvmfs-docker/stratum0
+CVMFS_ROOT_DIR=/scratch/cvmfs-docker/cvmfs-publisher
 CVMFS_CONTAINER_IMAGE_NAME=slidspitfire/cvmfs-publisher:latest
 
 sh Dockerrun-args.sh $CVMFS_ROOT_DIR $CVMFS_CONTAINER_IMAGE_NAME

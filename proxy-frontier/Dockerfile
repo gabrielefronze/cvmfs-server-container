@@ -13,6 +13,7 @@ RUN yum clean all && \
 
 ADD squid.conf /etc/squid/squid.conf
 ADD entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 EXPOSE 3128
 

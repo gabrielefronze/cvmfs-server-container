@@ -1,0 +1,3 @@
+sudo cvmfs_server mkfs -w http://virgo-test-01.to.infn.it/cvmfs/test.repo \
+                         -u gw,/srv/cvmfs/test.repo/data/txn,http://virgo-test-01.to.infn.it:4929/api/v1 \
+                         -k /etc/cvmfs/keys -o `whoami` test.repo

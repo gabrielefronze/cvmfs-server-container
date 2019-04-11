@@ -146,7 +146,7 @@ function cvmfs_server_container {
 
             echo "Running cvmfs publisher docker container as $CVMFS_STRATUM_CONTAINER with:"
             echo -e "\t- Host cvmfs dir = $HOST_CVMFS_DATA_DIR"
-            sh "$CVMFS_SERVER_LOCAL_GIT_REPO"/cvmfs-stratum"$STRATUM"/Dockerrun-args.sh "$HOST_CVMFS_DATA_DIR" "$IMAGE_NAME" >> "$CVMFS_LOG_DIR"/run.log
+            sh "$CVMFS_SERVER_LOCAL_GIT_REPO"/cvmfs-publisher/Dockerrun-args.sh "$HOST_CVMFS_DATA_DIR" "$IMAGE_NAME" >> "$CVMFS_LOG_DIR"/run.log
             echo "done"
 
             unset CVMFS_STRATUM_CONTAINER

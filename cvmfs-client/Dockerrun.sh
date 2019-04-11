@@ -1,4 +1,4 @@
-docker run -t \
+docker run -t -d \
 --name cvmfs-client \
 --hostname cvmfs-client \
 --privileged \

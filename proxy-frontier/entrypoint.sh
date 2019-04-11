@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# This Dockerfile was extracted from this GitHub repository https://github.com/slateci/container-osg-frontier-squid
+# This script was extracted from this GitHub repository https://github.com/slateci/container-osg-frontier-squid
 
 if [[ ! -e /etc/squid/squid.conf ]]; then
   echo "Generating squid.conf..."

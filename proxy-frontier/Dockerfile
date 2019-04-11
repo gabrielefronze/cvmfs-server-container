@@ -12,7 +12,8 @@ RUN yum clean all && \
     systemctl enable frontier-squid
 
 ADD squid.conf /etc/squid/squid.conf
+ADD entrypoint.sh /entrypoint.sh
 
 EXPOSE 3128
 
-CMD ["/app/entrypoint.sh"]
+CMD ["/entrypoint.sh"]

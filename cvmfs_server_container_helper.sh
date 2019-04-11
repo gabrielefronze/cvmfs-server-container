@@ -9,7 +9,7 @@
 
 export CVMFS_SERVER_GIT_URL=https://github.com/gabrielefronze/cvmfs-server-container.git
 export CVMFS_SERVER_LOCAL_GIT_REPO=~/cvmfs-server-container
-export CVMFS_CONTAINER_BASE_IMAGE_NAME=slidspitfire/cvmfs-stratum
+export CVMFS_CONTAINER_BASE_IMAGE_NAME=slidspitfire/cvmfs-
 export CVMFS_STRATUM_CONTAINER="dummy"
 export DEFAULT_HOST_CVMFS_ROOT_DIR=/scratch/cvmfs-docker
 export CVMFS_LOG_DIR=/var/log/cvmfs-server-container
@@ -49,6 +49,8 @@ function prompt_stratum_selection {
 }
 
 function cvmfs_server_container {
+    set -e
+
     MODE=$1
 
     case "$MODE" in
@@ -69,24 +71,44 @@ function cvmfs_server_container {
     build)  
         rm -f "$CVMFS_LOG_DIR"/build.log
 
-        STRATUM="dummy"
+        REQ="$2"
         
-        if [[ ( ! -z $2 ) && ( "$2"==0 || "$2"==1 )]]; then
-            STRATUM="$2"
-        else
-            echo "FATAL: provided option $2 not recognized. Please select [0/1]."
+        case "$REQ" in
+        0|1)
+            echo -n "Building base cvmfs-server image... "
+            docker build -t slidspitfire/cvmfs-server-base "$CVMFS_SERVER_LOCAL_GIT_REPO"/cvmfs-server-base >> "$CVMFS_LOG_DIR"/build.log
+            echo "done"
+
+            echo -n "Building cvmfs stratum$REQ base image with name $CVMFS_CONTAINER_BASE_IMAGE_NAME-stratum$REQ-base... "
+            docker build -t "$CVMFS_CONTAINER_BASE_IMAGE_NAME"-stratum"$REQ"-base "$CVMFS_SERVER_LOCAL_GIT_REPO"/cvmfs-stratum"$REQ" >> "$CVMFS_LOG_DIR"/build.log
+            echo "done"
+        ;;
+        pub)
+            echo -n "Building base cvmfs-server image... "
+            docker build -t slidspitfire/cvmfs-server-base "$CVMFS_SERVER_LOCAL_GIT_REPO"/cvmfs-server-base >> "$CVMFS_LOG_DIR"/build.log
+            echo "done"
+
+            echo -n "Building cvmfs publisher base image with name cvmfs-publisher... "
+            docker build -t "$CVMFS_CONTAINER_BASE_IMAGE_NAME"-publisher "$CVMFS_SERVER_LOCAL_GIT_REPO"/cvmfs-publisher >> "$CVMFS_LOG_DIR"/build.log
+            echo "done"
+        ;;
+        client)
+            echo -n "Building cvmfs client image with name cvmfs-client... "
+            docker build -t "$CVMFS_CONTAINER_BASE_IMAGE_NAME"-client "$CVMFS_SERVER_LOCAL_GIT_REPO"/cvmfs-client >> "$CVMFS_LOG_DIR"/build.log
+            echo "done"
+        ;;
+        squid)
+            echo -n "Building frontier-squid image with name cvmfs-frontier-squid... "
+            docker build -t "$CVMFS_CONTAINER_BASE_IMAGE_NAME"-frontier-squid "$CVMFS_SERVER_LOCAL_GIT_REPO"/proxy-frontier >> "$CVMFS_LOG_DIR"/build.log
+            echo "done"
+        ;;
+        *)
+            echo "FATAL: provided option $2 not recognized. Please select [0/1/pub/client]."
             exit 1
-        fi
+        ;;
+        esac
 
-        echo -n "Building base cvmfs-server image... "
-        docker build -t slidspitfire/cvmfs-server-base "$CVMFS_SERVER_LOCAL_GIT_REPO"/cvmfs-server-base >> "$CVMFS_LOG_DIR"/build.log
-        echo "done"
-
-        echo -n "Building cvmfs stratum$STRATUM base image with name $CVMFS_CONTAINER_BASE_IMAGE_NAME$STRATUM-base... "
-        docker build -t "$CVMFS_CONTAINER_BASE_IMAGE_NAME""$STRATUM"-base "$CVMFS_SERVER_LOCAL_GIT_REPO"/cvmfs-stratum"$STRATUM" >> "$CVMFS_LOG_DIR"/build.log
-        echo "done"
-
-        unset STRATUM
+        unset REQ
 
         ln -sf "$CVMFS_LOG_DIR"/build.log "$CVMFS_LOG_DIR"/last-operation.log
         ;;
@@ -95,30 +117,61 @@ function cvmfs_server_container {
     run)    
         rm -f "$CVMFS_LOG_DIR"/run.log
 
-        STRATUM="dummy"
+        REQ="$2"
+        
+        case "$REQ" in
+        0|1)
+            STRATUM="$REQ"
 
-        if [[ ( ! -z $2 ) && ( "$2"==0 || "$2"==1 )]]; then
-            STRATUM="$2"
-        else
-            echo "FATAL: provided option $2 not recognized. Please select [0/1]."
+            CVMFS_STRATUM_CONTAINER=cvmfs-stratum"$STRATUM"
+
+            HOST_CVMFS_DATA_DIR=${3:-"$DEFAULT_HOST_CVMFS_ROOT_DIR"/"$CVMFS_STRATUM_CONTAINER"}
+
+            IMAGE_NAME="$CVMFS_CONTAINER_BASE_IMAGE_NAME"-stratum"$STRATUM"-base
+
+            echo "Running cvmfs stratum$STRATUM docker container as $CVMFS_STRATUM_CONTAINER with:"
+            echo -e "\t- Host cvmfs dir = $HOST_CVMFS_DATA_DIR"
+            sh "$CVMFS_SERVER_LOCAL_GIT_REPO"/cvmfs-stratum"$STRATUM"/Dockerrun-args.sh "$HOST_CVMFS_DATA_DIR" "$IMAGE_NAME" >> "$CVMFS_LOG_DIR"/run.log
+            echo "done"
+
+            unset CVMFS_STRATUM_CONTAINER
+            unset IMAGE_NAME
+            unset HOST_CVMFS_DATA_DIR
+            unset STRATUM
+        ;;
+        pub)
+            CVMFS_STRATUM_CONTAINER=cvmfs-publisher
+
+            HOST_CVMFS_DATA_DIR=${3:-"$DEFAULT_HOST_CVMFS_ROOT_DIR"/"$CVMFS_STRATUM_CONTAINER"}
+
+            IMAGE_NAME="$CVMFS_CONTAINER_BASE_IMAGE_NAME"-publisher
+
+            echo "Running cvmfs publisher docker container as $CVMFS_STRATUM_CONTAINER with:"
+            echo -e "\t- Host cvmfs dir = $HOST_CVMFS_DATA_DIR"
+            sh "$CVMFS_SERVER_LOCAL_GIT_REPO"/cvmfs-stratum"$STRATUM"/Dockerrun-args.sh "$HOST_CVMFS_DATA_DIR" "$IMAGE_NAME" >> "$CVMFS_LOG_DIR"/run.log
+            echo "done"
+
+            unset CVMFS_STRATUM_CONTAINER
+            unset IMAGE_NAME
+            unset HOST_CVMFS_DATA_DIR
+        ;;
+        client)
+            echo "Running cvmfs client docker container as cvmfs-client... "
+            sh "$CVMFS_SERVER_LOCAL_GIT_REPO"/cvmfs-client/Dockerrun.sh >> "$CVMFS_LOG_DIR"/run.log
+            echo "done"
+        ;;
+        squid)
+            echo "Running frontier-squid docker container as cvmfs-squid... "
+            sh "$CVMFS_SERVER_LOCAL_GIT_REPO"/proxy-frontier/Dockerrun.sh >> "$CVMFS_LOG_DIR"/run.log
+            echo "done"
+        ;;
+        *)
+            echo "FATAL: provided option $2 not recognized. Please select [0/1/pub/client]."
             exit 1
-        fi
+        ;;
+        esac
 
-        CVMFS_STRATUM_CONTAINER=cvmfs-stratum"$STRATUM"
-
-        HOST_CVMFS_DATA_DIR=${3:-"$DEFAULT_HOST_CVMFS_ROOT_DIR"/"$CVMFS_STRATUM_CONTAINER"}
-
-        IMAGE_NAME="$CVMFS_CONTAINER_BASE_IMAGE_NAME""$STRATUM"-base
-
-        echo "Running cvmfs stratum$STRATUM docker container as $CVMFS_STRATUM_CONTAINER with:"
-        echo -e "\t- Host cvmfs dir = $HOST_CVMFS_DATA_DIR"
-        sh "$CVMFS_SERVER_LOCAL_GIT_REPO"/cvmfs-stratum"$STRATUM"/Dockerrun-args.sh "$HOST_CVMFS_DATA_DIR" "$IMAGE_NAME" >> "$CVMFS_LOG_DIR"/run.log
-        echo "done"
-
-        unset CVMFS_STRATUM_CONTAINER
-        unset IMAGE_NAME
-        unset STRATUM
-        unset HOST_CVMFS_DATA_DIR
+        unset REQ
 
         ln -sf "$CVMFS_LOG_DIR"/run.log "$CVMFS_LOG_DIR"/last-operation.log
         ;;

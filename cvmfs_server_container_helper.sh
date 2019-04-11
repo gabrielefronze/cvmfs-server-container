@@ -49,8 +49,6 @@ function prompt_stratum_selection {
 }
 
 function cvmfs_server_container {
-    set -e
-
     MODE=$1
 
     case "$MODE" in

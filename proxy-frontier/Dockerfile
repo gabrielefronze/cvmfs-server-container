@@ -11,8 +11,7 @@ RUN yum clean all && \
     yum install -y frontier-squid && \
     systemctl enable frontier-squid
 
-COPY app/ /app
-
+ADD squid.conf /etc/squid/squid.conf
 
 EXPOSE 3128
 

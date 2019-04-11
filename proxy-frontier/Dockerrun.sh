@@ -1,4 +1,3 @@
-docker run --rm --name osg-frontier-squid \
--v `dirname "$0"`/squid.conf:/etc/squid/squid.conf \
+docker run --rm --name cvmfs-squid \
 -v /scratch/squid:/var/cache/squid \
--p 3128:3128 slateci/osg-frontier-squid
+-p 3128:3128 slidspitfire/cvmfs-squid

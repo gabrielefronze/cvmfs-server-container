@@ -1,0 +1,1 @@
+cvmfs_server add-replica -o root http://cvmfs0.virgo.infn.it:8000/cvmfs/virgotest.ego-gw.it /etc/cvmfs/keys/virgotest.ego-gw.it.pub

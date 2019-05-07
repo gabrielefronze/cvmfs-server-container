@@ -4,7 +4,9 @@ if [[ -z $1 ]]; then
 fi
 
 REPO_NAME="$1"
-SERVER_NAME="${2:cvmfs1.virgo.infn.it}"
+SERVER_NAME="${2:-cvmfs1.virgo.infn.it}"
+
+echo "Setting up repo $REPO_NAME on server $SERVER_NAME."
 
 # Setup of connection configuration
 echo "CVMFS_SERVER_URL=http://$SERVER_NAME/cvmfs/$REPO_NAME" > /etc/cvmfs/default.local

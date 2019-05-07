@@ -1,6 +1,13 @@
+if [[ -z $1 ]]; then
+    echo "Please provide repo name..."
+    exit 1
+fi
+
+REPO_NAME="$1"
+
 # Setup of connection configuration
-echo "CVMFS_SERVER_URL=http://virgo-test-02.to.infn.it/cvmfs/testdir.to.infn.it" > /etc/cvmfs/default.local
-echo "CVMFS_REPOSITORIES=testdir.to.infn.it" >> /etc/cvmfs/default.local
+echo "CVMFS_SERVER_URL=http://virgo-test-02.to.infn.it/cvmfs/$REPO_NAME" > /etc/cvmfs/default.local
+echo "CVMFS_REPOSITORIES=$REPO_NAME" >> /etc/cvmfs/default.local
 echo "CVMFS_HTTP_PROXY=http://virgo-test-02.to.infn.it:3128" >> /etc/cvmfs/default.local
 echo "CVMFS_CACHE_BASE=/cvmfs-cache" >> /etc/cvmfs/default.local
 echo "CVMFS_QUOTA_LIMIT=10240" >> /etc/cvmfs/default.local

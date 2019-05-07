@@ -11,7 +11,7 @@ export CVMFS_SERVER_GIT_URL=https://github.com/gabrielefronze/cvmfs-server-conta
 export CVMFS_SERVER_LOCAL_GIT_REPO=~/cvmfs-server-container
 export CVMFS_CONTAINER_BASE_IMAGE_NAME=slidspitfire/cvmfs
 export CVMFS_STRATUM_CONTAINER="dummy"
-export DEFAULT_HOST_CVMFS_ROOT_DIR=/scratch/cvmfs-docker
+export DEFAULT_HOST_CVMFS_ROOT_DIR=/local/cvmfs-docker
 export CVMFS_LOG_DIR=/var/log/cvmfs-server-container
 
 if [[ ! -d "$CVMFS_LOG_DIR" ]]; then

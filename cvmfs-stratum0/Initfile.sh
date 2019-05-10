@@ -5,10 +5,10 @@
 # For abuse reports and other communications write to 
 # <gabriele.fronze at to.infn.it>
 
-sudo source ../cvmfs-server-base/Initfile.sh
+source ../cvmfs-server-base/Initfile.sh
 
-sudo yum install -y cvmfs-gateway
+yum install -y cvmfs-gateway
 
-sudo systemctl enable cvmfs-gateway.service
+systemctl enable cvmfs-gateway.service
 
-sudo /usr/sbin/init
+/usr/sbin/init

@@ -5,17 +5,17 @@
 # For abuse reports and other communications write to 
 # <gabriele.fronze at to.infn.it>
 
-sudo rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-sudo yum install -y yum-plugin-priorities
-sudo rpm -Uvh http://mirror.grid.uchicago.edu/pub/osg/3.4/osg-3.4-el7-release-latest.rpm
+rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+yum install -y yum-plugin-priorities
+rpm -Uvh http://mirror.grid.uchicago.edu/pub/osg/3.4/osg-3.4-el7-release-latest.rpm
 
-sudo yum clean all
-sudo yum update -y
-sudo yum install -y frontier-squid
-sudo    systemctl enable frontier-squid
+yum clean all
+yum update -y
+yum install -y frontier-squid
+   systemctl enable frontier-squid
 
 cp squid.conf /etc/squid/squid.conf
 cp entrypoint.sh /entrypoint.sh
-sudo chmod +x /entrypoint.sh
+chmod +x /entrypoint.sh
 
-sudo /entrypoint.sh
+/entrypoint.sh

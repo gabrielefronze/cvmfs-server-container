@@ -5,10 +5,10 @@
 # For abuse reports and other communications write to 
 # <gabriele.fronze at to.infn.it>
 
-sudo source ../cvmfs-server-base/Initfile.sh
+source ../cvmfs-server-base/Initfile.sh
 
-sudo yum install -y perl-Compress-Zlib perl-Data-Dumper perl-libwww-perl perl-JSON mod_wsgi
-sudo wget https://raw.githubusercontent.com/cvmfs/cvmfs_info/master/cvmfs_info
-sudo chmod +x cvmfs_info
+yum install -y perl-Compress-Zlib perl-Data-Dumper perl-libwww-perl perl-JSON mod_wsgi
+wget https://raw.githubusercontent.com/cvmfs/cvmfs_info/master/cvmfs_info
+chmod +x cvmfs_info
 
-sudo /usr/sbin/init
+/usr/sbin/init

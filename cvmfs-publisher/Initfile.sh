@@ -6,7 +6,3 @@
 # <gabriele.fronze at to.infn.it>
 
 source ../cvmfs-server-base/Initfile.sh
-
-yum install -y perl-Compress-Zlib perl-Data-Dumper perl-libwww-perl perl-JSON mod_wsgi
-wget https://raw.githubusercontent.com/cvmfs/cvmfs_info/master/cvmfs_info
-chmod +x cvmfs_info

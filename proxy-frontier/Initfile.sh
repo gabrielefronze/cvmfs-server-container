@@ -13,6 +13,7 @@ yum clean all
 yum update -y
 yum install -y frontier-squid
 systemctl enable frontier-squid
+systemctl start frontier-squid
 
 cp squid.conf /etc/squid/squid.conf
 cp entrypoint.sh /entrypoint.sh

@@ -15,11 +15,10 @@ echo "CVMFS_HTTP_PROXY=DIRECT" > /etc/cvmfs/default.local
 
 systemctl enable httpd.service
 sed '/Listen 80/ a Listen 8000' -i /etc/httpd/conf/httpd.conf
+systemctl start httpd.service
 
 mkdir -p /etc/cvmfs-scripts
 cp restore-repo.sh /etc/cvmfs-scripts
 cp cvmfs-httpd-conf.template /etc/cvmfs-scripts
 cp cvmfs-fstab.template /etc/cvmfs-scripts
 chmod +x /etc/cvmfs-scripts/restore-repo.sh
-
-/usr/sbin/init

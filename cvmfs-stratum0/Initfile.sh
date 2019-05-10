@@ -10,5 +10,4 @@ source ../cvmfs-server-base/Initfile.sh
 yum install -y cvmfs-gateway
 
 systemctl enable cvmfs-gateway.service
-
-/usr/sbin/init
+systemctl start cvmfs-gateway.service

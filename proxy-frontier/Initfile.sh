@@ -12,7 +12,7 @@ rpm -Uvh http://mirror.grid.uchicago.edu/pub/osg/3.4/osg-3.4-el7-release-latest.
 yum clean all
 yum update -y
 yum install -y frontier-squid
-   systemctl enable frontier-squid
+systemctl enable frontier-squid
 
 cp squid.conf /etc/squid/squid.conf
 cp entrypoint.sh /entrypoint.sh

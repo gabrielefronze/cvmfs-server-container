@@ -45,6 +45,8 @@ function prompt_stratum_selection {
             echo "FATAL: No cvmfs container found. Please run it or manually set the CVMFS_STRATUM_CONTAINER environment variable."
             exit 1
         fi
+
+        echo "Running next operation on $CVMFS_STRATUM_CONTAINER."
     fi
 }
 

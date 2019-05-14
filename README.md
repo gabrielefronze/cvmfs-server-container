@@ -52,6 +52,106 @@ Once the container has been built the `cvmfs_server_container run [0/1]` will ru
 From now on the procedures are coherent with the `cvmfs_server` standard ones, hence `mkfs` creates a new repo, `trensaction` enables modifications, `publish` dues the equivalent to `git push` etc.
 As an addition the `mkfs-list` option is provided to instantiate several repositories at once with just the `-o root` option.
 
+## Test instance - step-by-step guide
+The following instructions are aimed at running a test instance locally on a single Docker host.
+
+1. Clone the `git` repo locally (if not done already!):
+
+    ```bash
+    cd
+    git clone https://github.com/gabrielefronze/cvmfs-server-container.git
+    ```
+
+2. Source the `cmvfs_container_helper.sh` script:
+
+    ```bash
+    cd cvfms-server-container
+    source cvmfs_server_container_helper.sh
+    ```
+
+3. Make sure you are using the latest version:
+
+    ```bash
+    cvmfs_server_container get
+    ```
+
+4. Build all the needed containers:
+
+    ```bash
+    cvmfs_server_container build 0
+    cvmfs_server_container build 1
+    ```
+
+5. Run the containers:
+
+    ```bash
+    cvmfs_server_container run 0 --test
+    cvmfs_server_container run 1
+    ```
+
+6. An environment variable, `CVMFS_STRATUM_CONTAINER`, holds the name of the container to send commands to. It defaults to the last container that has been run. At the moment it points to `cvmfs-stratum1`. To switch to the `cvmfs-stratum0` container instead run:
+
+    ```bash
+    cvmfs_server_container switch-str
+    ```
+
+    Now the `cvmfs-stratum0` is selected and you can proceed.
+
+7. To create a test repo run the following:
+
+    ```bash
+    cvmfs_server_container mkfs your.test.repo.name
+    ```
+
+8. Copy the public key of the newly created repo to the `cvmfs-stratum1` container:
+
+    ```bash
+    cd /var/cvmfs-docker
+    cp stratum0/etc-cvmfs-keys/your.test.repo.name.pub stratu
+    m1/etc-cvmfs-keys/your.test.repo.name.pub
+    cd
+    ```
+
+9. Select the stratum-1 and set it up to be a replica of stratum-0. Note that the key path is the one local to the container itself.
+
+    ```bash
+    cvmfs_server_container switch-str
+    cvmfs_server_container add-replica -o root http://cvmfs-stratum0:8000/cvmfs/your.test.repo.name /etc/cvmfs/keys/your.test.repo.name.pub
+    ```
+
+10. Run the first stratum-1 snapshot to obtain the latest repo version from the stratum-0:
+
+    ```bash
+    cvmfs_server_container snapshot your.test.repo.name
+    ```
+
+11. Select again the stratum-0 and perform the first transaction (similar to `git push`...):
+
+    ```bash
+    cvmfs_server_container switch-str
+    cvmfs_server_container transaction your.test.repo.name
+    echo "Hello world" >> /var/cvmfs-docker/stratum0/cvmfs/your.test.repo.name/hello_world.txt
+    cvmfs_server_container publish your.test.repo.name
+    ```
+
+12. Perform a stratum-1 snapshot to force update:
+
+    ```bash
+    cvmfs_server_container switch-str
+    cvmfs_server_container snapshot your.test.repo.name
+    ```
+
+13. In case you want to run a cvmfs client as well do the following to fire it up in one shot:
+
+    ```bash
+    cvmfs_server_container build client
+    cvmfs_server_container run client
+    docker cp /var/cvmfs-docker/stratum0/etc-cvmfs-keys/your.test.repo.name.pub cvmfs-client:/etc/cvmfs/keys
+    docker exec cvmfs-client /etc/cvmfs-scripts/client-init.sh your.test.repo.name.pub
+    ```
+
+
+
 ## Networking requirements
 In a multi-host setup the stratum-0 instance and the stratum-1 instances require the hosting machines to have a mutually reachable IP address on which TCP port 8000 is opened.
 

@@ -122,8 +122,8 @@ function cvmfs_server_container {
         0|1)
             STRATUM="$REQ"
 
-            if [[ "$REQ"==0 && ! -z "$3"]]; then
-                if [[ "$3"=="--test" ]]; then
+            if [[ "$REQ" == 0 && ! (-z "$3")]]; then
+                if [[ "$3" == "--test" ]]; then
                     TEST=True
                 else
                     echo "ERROR: provided option $3 not recognized. Please use '--test' if needed (port 8000 won't be exposed on stratum-0)."

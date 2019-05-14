@@ -116,10 +116,19 @@ function cvmfs_server_container {
         rm -f "$CVMFS_LOG_DIR"/run.log
 
         REQ="$2"
+        TEST=False
         
         case "$REQ" in
         0|1)
             STRATUM="$REQ"
+
+            if [[ "$REQ"==0 && ! -z "$3"]]; then
+                if [[ "$3"=="--test" ]]; then
+                    TEST=True
+                else
+                    echo "ERROR: provided option $3 not recognized. Please use '--test' if needed (port 8000 won't be exposed on stratum-0)."
+                fi
+            fi
 
             CVMFS_STRATUM_CONTAINER=cvmfs-stratum"$STRATUM"
 
@@ -129,7 +138,7 @@ function cvmfs_server_container {
 
             echo "Running cvmfs stratum$STRATUM docker container as $CVMFS_STRATUM_CONTAINER with:"
             echo -e "\t- Host cvmfs dir = $HOST_CVMFS_DATA_DIR"
-            sh "$CVMFS_SERVER_LOCAL_GIT_REPO"/cvmfs-stratum"$STRATUM"/Dockerrun-args.sh "$HOST_CVMFS_DATA_DIR" "$IMAGE_NAME" >> "$CVMFS_LOG_DIR"/run.log
+            sh "$CVMFS_SERVER_LOCAL_GIT_REPO"/cvmfs-stratum"$STRATUM"/Dockerrun-args.sh "$HOST_CVMFS_DATA_DIR" "$IMAGE_NAME" "$TEST" >> "$CVMFS_LOG_DIR"/run.log
             echo "done"
 
             unset CVMFS_STRATUM_CONTAINER

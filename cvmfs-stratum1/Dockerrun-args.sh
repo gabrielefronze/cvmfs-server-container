@@ -12,7 +12,7 @@ mkdir -p "$CVMFS_ROOT_DIR"/var-spool-cvmfs
 mkdir "$CVMFS_ROOT_DIR"/cvmfs
 
 docker run -d \
--p 8000:8000 -p 80:80 \
+-p 8000:8000 \
 --name cvmfs-stratum1 \
 --hostname cvmfs-stratum1 \
 --privileged \

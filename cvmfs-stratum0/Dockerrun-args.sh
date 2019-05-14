@@ -15,7 +15,6 @@ mkdir -p "$CVMFS_ROOT_DIR"/etc-cvmfs
 
 docker run -d \
 -p 8000:8000 \
--p 80:80 \
 -p 4929:4929 \
 --name cvmfs-stratum0 \
 --hostname cvmfs-stratum0 \

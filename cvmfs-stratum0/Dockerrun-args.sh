@@ -15,6 +15,8 @@ mkdir -p "$CVMFS_ROOT_DIR"/srv-cvmfs
 mkdir -p "$CVMFS_ROOT_DIR"/etc-cvmfs
 
 if [[ "$TEST"==False ]]; then
+    echo "!!! Running in test mode !!!"
+
     docker run -d \
     -p 8000:8000 \
     -p 4929:4929 \

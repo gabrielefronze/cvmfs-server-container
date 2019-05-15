@@ -117,24 +117,25 @@ function cvmfs_server_container {
     run)    
         rm -f "$CVMFS_LOG_DIR"/run.log
 
-        REQ="$2"
+        REQ=""
         TEST=False
+        HOST_CVMFS_DATA_DIR=""
+
+        if [[ "$2" == "--test" ]]; then
+            REQ="$3"
+            HOST_CVMFS_DATA_DIR=${4:-"$DEFAULT_HOST_CVMFS_ROOT_DIR"/"$CVMFS_STRATUM_CONTAINER"}
+            TEST=True
+        else
+            REQ="$2"
+            HOST_CVMFS_DATA_DIR=${3:-"$DEFAULT_HOST_CVMFS_ROOT_DIR"/"$CVMFS_STRATUM_CONTAINER"}
+            TEST=False
+        fi
         
         case "$REQ" in
         0|1)
             STRATUM="$REQ"
 
-            if [[ "$REQ" == 0 && ! (-z "$3")]]; then
-                if [[ "$3" == "--test" ]]; then
-                    TEST=True
-                else
-                    echo "ERROR: provided option $3 not recognized. Please use '--test' if needed (port 8000 won't be exposed on stratum-0)."
-                fi
-            fi
-
             CVMFS_STRATUM_CONTAINER=cvmfs-stratum"$STRATUM"
-
-            HOST_CVMFS_DATA_DIR=${3:-"$DEFAULT_HOST_CVMFS_ROOT_DIR"/"$CVMFS_STRATUM_CONTAINER"}
 
             IMAGE_NAME="$CVMFS_CONTAINER_BASE_IMAGE_NAME"-stratum"$STRATUM"-base
 
@@ -150,8 +151,6 @@ function cvmfs_server_container {
         ;;
         pub)
             CVMFS_STRATUM_CONTAINER=cvmfs-publisher
-
-            HOST_CVMFS_DATA_DIR=${3:-"$DEFAULT_HOST_CVMFS_ROOT_DIR"/"$CVMFS_STRATUM_CONTAINER"}
 
             IMAGE_NAME="$CVMFS_CONTAINER_BASE_IMAGE_NAME"-publisher
 

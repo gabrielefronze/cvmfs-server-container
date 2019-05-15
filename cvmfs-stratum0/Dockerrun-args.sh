@@ -14,6 +14,9 @@ mkdir -p "$CVMFS_ROOT_DIR"/cvmfs
 mkdir -p "$CVMFS_ROOT_DIR"/srv-cvmfs
 mkdir -p "$CVMFS_ROOT_DIR"/etc-cvmfs
 
+echo "!!! Running in test mode with private port 8000 !!!"
+echo "TEST=$TEST"
+
 if [[ "$TEST"=="false" ]]; then
     docker run -d \
     -p 8000:8000 \
@@ -28,8 +31,6 @@ if [[ "$TEST"=="false" ]]; then
     --volume /sys/fs/cgroup:/sys/fs/cgroup \
     "$CVMFS_CONTAINER_IMAGE_NAME"
 else
-    echo "!!! Running in test mode with private port 8000 !!!"
-
     docker run -d \
     -p 4929:4929 \
     --name cvmfs-stratum0 \

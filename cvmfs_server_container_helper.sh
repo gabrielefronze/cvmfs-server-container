@@ -43,7 +43,7 @@ function prompt_stratum_selection {
             CVMFS_STRATUM_CONTAINER="cvmfs-stratum1"
         else
             echo "FATAL: No cvmfs container found. Please run it or manually set the CVMFS_STRATUM_CONTAINER environment variable."
-            exit 1
+            # exit 1
         fi
 
         echo "Running next operation on $CVMFS_STRATUM_CONTAINER."
@@ -214,21 +214,25 @@ function cvmfs_server_container {
         ;;
 
     # Option to initialize the required repo[s] using the internal script and committing the new image on top of the existing
-    mkfs)
+    mkfs-list)
         rm -f "$CVMFS_LOG_DIR"/initrepo.log
 
         prompt_stratum_selection
 
         REQUIRED_REPOS="${@: -1}"
-        OPTIONS="${@:2:$#-1}"
+        OPTIONS="${@:2:$#-3}"
+
+        echo "Required repos: $REQUIRED_REPOS"
 
         if [[ -z "$OPTIONS" ]] || [[ ! $(echo "$OPTIONS" | grep -q "\-o root") ]]; then
             OPTIONS="-o root ""$OPTIONS"
         fi
 
+        echo "Required options: $OPTIONS"
+
         if [[ -z "$REQUIRED_REPOS" ]]; then
             echo "FATAL: no repository name provided."
-            exit 1
+            # exit 1
         else
             REPO_NAME_ARRAY=$(echo $REQUIRED_REPOS | tr "," "\n")
             REQUIRED_REPOS_SUFFIX=$(echo $REQUIRED_REPOS | sed 's/\,/-/')
@@ -236,8 +240,8 @@ function cvmfs_server_container {
             for REPO_NAME in $REPO_NAME_ARRAY
             do
                 echo -n "Initializing $REPO_NAME repository in $CVMFS_STRATUM_CONTAINER container with options: $OPTIONS ... "
-                docker exec -ti "$CVMFS_STRATUM_CONTAINER" cvmfs_server mkfs "$OPTIONS" >> "$CVMFS_LOG_DIR"/initrepo.log
-                docker exec -ti "$CVMFS_STRATUM_CONTAINER" cvmfs_server check "$REPO_NAME" >> "$CVMFS_LOG_DIR"/initrepo.log
+                # docker exec -ti "$CVMFS_STRATUM_CONTAINER" cvmfs_server mkfs -o root "$REPO_NAME" >> "$CVMFS_LOG_DIR"/initrepo.log
+                # docker exec -ti "$CVMFS_STRATUM_CONTAINER" cvmfs_server check "$REPO_NAME" >> "$CVMFS_LOG_DIR"/initrepo.log
                 echo "done"
             done
 

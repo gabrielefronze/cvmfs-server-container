@@ -10,6 +10,7 @@ CVMFS_CONTAINER_IMAGE_NAME="$2"
 
 mkdir -p "$CVMFS_ROOT_DIR"/var-spool-cvmfs
 mkdir "$CVMFS_ROOT_DIR"/cvmfs
+mkdir -p "$CVMFS_ROOT_DIR"/etc-cvmfs/keys
 
 docker run -d \
 -p 8000:8000 \

@@ -236,7 +236,7 @@ function cvmfs_server_container {
             for REPO_NAME in $REPO_NAME_ARRAY
             do
                 echo -n "Initializing $REPO_NAME repository in $CVMFS_STRATUM_CONTAINER container with options: $OPTIONS ... "
-                docker exec -ti "$CVMFS_STRATUM_CONTAINER" cvmfs_server mkfs -o root "$REPO_NAME" >> "$CVMFS_LOG_DIR"/initrepo.log
+                docker exec -ti "$CVMFS_STRATUM_CONTAINER" cvmfs_server mkfs "$OPTIONS" >> "$CVMFS_LOG_DIR"/initrepo.log
                 docker exec -ti "$CVMFS_STRATUM_CONTAINER" cvmfs_server check "$REPO_NAME" >> "$CVMFS_LOG_DIR"/initrepo.log
                 echo "done"
             done

@@ -118,7 +118,7 @@ function cvmfs_server_container {
         rm -f "$CVMFS_LOG_DIR"/run.log
 
         REQ=""
-        TEST=False
+        TEST=false
         HOST_CVMFS_DATA_DIR=""
 
         if [[ "$2" == "--test" ]]; then
@@ -126,13 +126,13 @@ function cvmfs_server_container {
             STRATUM="$REQ"
             CVMFS_STRATUM_CONTAINER=cvmfs-stratum"$STRATUM"
             HOST_CVMFS_DATA_DIR=${4:-"$DEFAULT_HOST_CVMFS_ROOT_DIR"/"$CVMFS_STRATUM_CONTAINER"}
-            TEST=True
+            TEST=true
         else
             REQ="$2"
             STRATUM="$REQ"
             CVMFS_STRATUM_CONTAINER=cvmfs-stratum"$STRATUM"
             HOST_CVMFS_DATA_DIR=${3:-"$DEFAULT_HOST_CVMFS_ROOT_DIR"/"$CVMFS_STRATUM_CONTAINER"}
-            TEST=False
+            TEST=false
         fi
         
         case "$REQ" in

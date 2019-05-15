@@ -19,7 +19,7 @@ if [[ ! -d "$CVMFS_LOG_DIR" ]]; then
 fi
 
 function prompt_stratum_selection {
-    if [[ "$CVMFS_STRATUM_CONTAINER"=="dummy" ]]; then
+    if [[ "$CVMFS_STRATUM_CONTAINER" == "dummy" ]]; then
         if [[ $(docker ps | grep -c "cvmfs-stratum0") == 1 ]]; then
             if [[ $(docker ps | grep -c "cvmfs-stratum1") == 1 ]]; then
                 read -p "Both stratum0 and stratum1 are running. Please enter [0/1]: " strindex
@@ -195,13 +195,13 @@ function cvmfs_server_container {
 
     # Option to switch the endpoint of CVMFS commands if both containers running locally on the same host
     switch-str)
-        if [[ ! $CVMFS_STRATUM_CONTAINER=="dummy" ]]; then
-            if [[ $CVMFS_STRATUM_CONTAINER=="cvmfs-stratum0" ]]; then
+        if [[ ! "$CVMFS_STRATUM_CONTAINER" == "dummy" ]]; then
+            if [[ "$CVMFS_STRATUM_CONTAINER" == "cvmfs-stratum0" ]]; then
                 echo "Switching to stratum1... done"
-                CVMFS_STRATUM_CONTAINER=="cvmfs-stratum1"
-            elif [[ $CVMFS_STRATUM_CONTAINER=="cvmfs-stratum1" ]]; then
+                CVMFS_STRATUM_CONTAINER = "cvmfs-stratum1"
+            elif [[ "$CVMFS_STRATUM_CONTAINER" == "cvmfs-stratum1" ]]; then
                 echo "Switching to stratum0... done"
-                CVMFS_STRATUM_CONTAINER=="cvmfs-stratum0"
+                CVMFS_STRATUM_CONTAINER = "cvmfs-stratum0"
             else
                 echo "FATAL: env variable CVMFS_STRATUM_CONTAINER=$CVMFS_STRATUM_CONTAINER does not refer to any runnign container."
                 echo "       Please manually export the name of the CVMFS cotnainer via 'export CVMFS_STRATUM_CONTAINER=<container-name>'."

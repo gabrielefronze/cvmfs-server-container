@@ -33,7 +33,7 @@ function prompt_stratum_selection {
                     ;;
                 *)
                     echo "FATAL: Unsupported option. Please use [0/1]"
-                    exit 1
+                    return
                     ;;
                 esac
             else
@@ -43,7 +43,7 @@ function prompt_stratum_selection {
             CVMFS_STRATUM_CONTAINER="cvmfs-stratum1"
         else
             echo "FATAL: No cvmfs container found. Please run it or manually set the CVMFS_STRATUM_CONTAINER environment variable."
-            # exit 1
+            return
         fi
 
         echo "Running next operation on $CVMFS_STRATUM_CONTAINER."
@@ -104,7 +104,7 @@ function cvmfs_server_container {
         ;;
         *)
             echo "FATAL: provided option $2 not recognized. Please select [0/1/pub/client]."
-            exit 1
+            return
         ;;
         esac
 
@@ -184,7 +184,7 @@ function cvmfs_server_container {
         ;;
         *)
             echo "FATAL: provided option $2 not recognized. Please select [0/1/pub/client]."
-            exit 1
+            return
         ;;
         esac
 
@@ -205,11 +205,11 @@ function cvmfs_server_container {
             else
                 echo "FATAL: env variable CVMFS_STRATUM_CONTAINER=$CVMFS_STRATUM_CONTAINER does not refer to any runnign container."
                 echo "       Please manually export the name of the CVMFS cotnainer via 'export CVMFS_STRATUM_CONTAINER=<container-name>'."
-                exit 1
+                return
             fi
         else
             echo "FATAL: no running CVMFS stratum containers."
-            exit 1
+            return
         fi
         ;;
 
@@ -232,7 +232,7 @@ function cvmfs_server_container {
 
         if [[ -z "$REQUIRED_REPOS" ]]; then
             echo "FATAL: no repository name provided."
-            # exit 1
+            return
         else
             REPO_NAME_ARRAY=$(echo $REQUIRED_REPOS | tr "," "\n")
             REQUIRED_REPOS_SUFFIX=$(echo $REQUIRED_REPOS | sed 's/\,/-/')

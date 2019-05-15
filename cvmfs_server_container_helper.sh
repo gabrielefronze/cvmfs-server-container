@@ -123,20 +123,20 @@ function cvmfs_server_container {
 
         if [[ "$2" == "--test" ]]; then
             REQ="$3"
+            STRATUM="$REQ"
+            CVMFS_STRATUM_CONTAINER=cvmfs-stratum"$STRATUM"
             HOST_CVMFS_DATA_DIR=${4:-"$DEFAULT_HOST_CVMFS_ROOT_DIR"/"$CVMFS_STRATUM_CONTAINER"}
             TEST=True
         else
             REQ="$2"
+            STRATUM="$REQ"
+            CVMFS_STRATUM_CONTAINER=cvmfs-stratum"$STRATUM"
             HOST_CVMFS_DATA_DIR=${3:-"$DEFAULT_HOST_CVMFS_ROOT_DIR"/"$CVMFS_STRATUM_CONTAINER"}
             TEST=False
         fi
         
         case "$REQ" in
         0|1)
-            STRATUM="$REQ"
-
-            CVMFS_STRATUM_CONTAINER=cvmfs-stratum"$STRATUM"
-
             IMAGE_NAME="$CVMFS_CONTAINER_BASE_IMAGE_NAME"-stratum"$STRATUM"-base
 
             echo "Running cvmfs stratum$STRATUM docker container as $CVMFS_STRATUM_CONTAINER with:"
@@ -150,6 +150,9 @@ function cvmfs_server_container {
             unset STRATUM
         ;;
         pub)
+            unset STRATUM
+            unset CVMFS_STRATUM_CONTAINER
+
             CVMFS_STRATUM_CONTAINER=cvmfs-publisher
 
             IMAGE_NAME="$CVMFS_CONTAINER_BASE_IMAGE_NAME"-publisher
@@ -164,11 +167,17 @@ function cvmfs_server_container {
             unset HOST_CVMFS_DATA_DIR
         ;;
         client)
+            unset STRATUM
+            unset CVMFS_STRATUM_CONTAINER
+
             echo "Running cvmfs client docker container as cvmfs-client... "
             sh "$CVMFS_SERVER_LOCAL_GIT_REPO"/cvmfs-client/Dockerrun.sh >> "$CVMFS_LOG_DIR"/run.log
             echo "done"
         ;;
         squid)
+            unset STRATUM
+            unset CVMFS_STRATUM_CONTAINER
+            
             echo "Running frontier-squid docker container as cvmfs-squid... "
             sh "$CVMFS_SERVER_LOCAL_GIT_REPO"/proxy-frontier/Dockerrun.sh >> "$CVMFS_LOG_DIR"/run.log
             echo "done"

@@ -346,20 +346,33 @@ function cvmfs_server_container {
         CVMFS_REPO_NAME="${@: -1}"
 
         if [[ "$1" == "transaction" || "$1" == "publish" ]]; then
-            if [[ -z "$CVMFS_REPO_NAME" ]]; then
-                echo "FATAL: You didn't give me the repo name!!!"
+            REPO_LIST=($(docker exec -ti "$CVMFS_STRATUM_CONTAINER" cvmfs_server list | awk '{print $1}'))
+            REPO_LIST_LENGTH="${#REPO_LIST[@]}"
+
+            if [[ ${REPO_LIST[*]} =~ $(echo '\<"$CVMFS_REPO_NAME"\>') ]]; then
+                docker exec -ti "$CVMFS_STRATUM_CONTAINER" cvmfs_server "$@"
+            elif [[ "$REPO_LIST_LENGTH" == 1 ]]; then
+                CVMFS_REPO_NAME="${REPO_LIST[0]}"
+                docker exec -ti "$CVMFS_STRATUM_CONTAINER" cvmfs_server "$@"
+            else
+                echo "FATAL: multiple repos available, but no one specified as argument. Aborting."
+                unset REPO_LIST
+                unset REPO_LIST_LENGTH
                 return
             fi
-        fi
 
-        docker exec -ti "$CVMFS_STRATUM_CONTAINER" cvmfs_server "$@"
+            unset REPO_LIST
+            unset REPO_LIST_LENGTH
 
-        if [[ "$1" == "transaction" ]]; then
-            mount -o remount,rw overlay_"$CVMFS_REPO_NAME"
-        fi
+            if [[ "$1" == "transaction" ]]; then
+                mount -o remount,rw overlay_"$CVMFS_REPO_NAME"
+            fi
 
-        if [[ "$1" == "publish" ]]; then
-            mount -o remount,ro overlay_"$CVMFS_REPO_NAME"
+            if [[ "$1" == "publish" ]]; then
+                mount -o remount,ro overlay_"$CVMFS_REPO_NAME"
+            fi
+        else
+            docker exec -ti "$CVMFS_STRATUM_CONTAINER" cvmfs_server "$@"       
         fi
 
         unset CVMFS_REPO_NAME

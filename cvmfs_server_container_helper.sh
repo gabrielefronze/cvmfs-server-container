@@ -306,7 +306,7 @@ function cvmfs_server_container {
         echo
         echo "Supported commands:\n"
         echo
-        echo "  get             Clone the git repo locally"
+        echo "  get             Clone the git repo locally and source again this script"
         echo "  build           [0/1]"
         echo "                  Build the stratum[0/1] container image"
         echo "  run             [0/1]"

@@ -345,6 +345,13 @@ function cvmfs_server_container {
 
         CVMFS_REPO_NAME="${@: -1}"
 
+        if [[ "$1" == "transaction" || "$1" == "publish" ]]; then
+            if [[ -z "$CVMFS_REPO_NAME" ]]; then
+                echo "FATAL: You didn't give me the repo name!!!"
+                return
+            fi
+        fi
+
         docker exec -ti "$CVMFS_STRATUM_CONTAINER" cvmfs_server "$@"
 
         if [[ "$1" == "transaction" ]]; then

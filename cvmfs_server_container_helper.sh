@@ -343,7 +343,7 @@ function cvmfs_server_container {
     *)  
         prompt_stratum_selection
 
-        CVMFS_REPO_NAME="$2"
+        CVMFS_REPO_NAME="${@: -1}"
 
         docker exec -ti "$CVMFS_STRATUM_CONTAINER" cvmfs_server "$@"
 

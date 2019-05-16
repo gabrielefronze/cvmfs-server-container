@@ -208,7 +208,7 @@ function cvmfs_server_container {
                 return
             fi
         else
-            echo "FATAL: no running CVMFS stratum containers."
+            prompt_stratum_selection
             return
         fi
         ;;

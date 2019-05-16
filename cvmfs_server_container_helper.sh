@@ -198,10 +198,10 @@ function cvmfs_server_container {
         if [[ ! "$CVMFS_STRATUM_CONTAINER" == "dummy" ]]; then
             if [[ "$CVMFS_STRATUM_CONTAINER" == "cvmfs-stratum0" ]]; then
                 echo "Switching to stratum1... done"
-                CVMFS_STRATUM_CONTAINER = "cvmfs-stratum1"
+                CVMFS_STRATUM_CONTAINER="cvmfs-stratum1"
             elif [[ "$CVMFS_STRATUM_CONTAINER" == "cvmfs-stratum1" ]]; then
                 echo "Switching to stratum0... done"
-                CVMFS_STRATUM_CONTAINER = "cvmfs-stratum0"
+                CVMFS_STRATUM_CONTAINER="cvmfs-stratum0"
             else
                 echo "FATAL: env variable CVMFS_STRATUM_CONTAINER=$CVMFS_STRATUM_CONTAINER does not refer to any runnign container."
                 echo "       Please manually export the name of the CVMFS cotnainer via 'export CVMFS_STRATUM_CONTAINER=<container-name>'."

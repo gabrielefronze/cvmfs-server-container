@@ -372,8 +372,10 @@ function cvmfs_server_container {
                 if [[ "$1" == "publish" ]]; then
                     mount -o remount,ro overlay_"$CVMFS_REPO_NAME"
                 fi
+            ;;
             *)
                 docker exec -ti "$CVMFS_STRATUM_CONTAINER" cvmfs_server "$@"       
+            ;;
         esac
 
         unset CVMFS_REPO_NAME

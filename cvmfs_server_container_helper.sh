@@ -62,7 +62,9 @@ function cvmfs_server_container {
             git clone "$CVMFS_SERVER_GIT_URL" "$CVMFS_SERVER_LOCAL_GIT_REPO"
         else
             echo "Pulling git repo from $CVMFS_SERVER_GIT_URL in $CVMFS_SERVER_LOCAL_GIT_REPO... "
+            git --git-dir="$CVMFS_SERVER_LOCAL_GIT_REPO"/.git --work-tree="$CVMFS_SERVER_LOCAL_GIT_REPO" stash
             git --git-dir="$CVMFS_SERVER_LOCAL_GIT_REPO"/.git --work-tree="$CVMFS_SERVER_LOCAL_GIT_REPO" pull
+            git --git-dir="$CVMFS_SERVER_LOCAL_GIT_REPO"/.git --work-tree="$CVMFS_SERVER_LOCAL_GIT_REPO" stash apply
             source "$CVMFS_SERVER_LOCAL_GIT_REPO"/$(basename $BASH_SOURCE)
         fi
         echo "done"

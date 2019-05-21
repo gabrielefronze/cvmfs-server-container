@@ -82,40 +82,45 @@ The following instructions are aimed at running a test instance locally on a sin
     cvmfs_server_container build 1
     ```
 
-5. Run the containers:
+5. Run the stratum-0 container:
 
     ```bash
     cvmfs_server_container run 0 --test
-    cvmfs_server_container run 1
     ```
 
-6. An environment variable, `CVMFS_STRATUM_CONTAINER`, holds the name of the container to send commands to. It defaults to the last container that has been run. At the moment it points to `cvmfs-stratum1`. To switch to the `cvmfs-stratum0` container instead run:
-
-    ```bash
-    cvmfs_server_container switch-str
-    ```
-
-    Now the `cvmfs-stratum0` is selected and you can proceed.
-
-7. To create a test repo run the following:
+6. To create a test repo run the following:
 
     ```bash
     cvmfs_server_container mkfs your.test.repo.name
     ```
 
-8. Copy the public key of the newly created repo to the `cvmfs-stratum1` container:
-
-    ```bash
-    cd /var/cvmfs-docker
-    cp stratum0/etc-cvmfs-keys/your.test.repo.name.pub stratu
-    m1/etc-cvmfs-keys/your.test.repo.name.pub
-    cd
-    ```
-
-9. Select the stratum-1 and set it up to be a replica of stratum-0. Note that the key path is the one local to the container itself.
+7. An environment variable, `CVMFS_STRATUM_CONTAINER`, holds the name of the container to send commands to. It defaults to the last container that has been run. For example at the moment it points to stratum-0. To switch in any moment the pointed container, simply run:
 
     ```bash
     cvmfs_server_container switch-str
+    ```
+
+    Please note that most of the wrappers prompt you for a choice or throw an error when no container is explicitly selected but both stratums have been detected in the `docker ps` output.
+
+8. Run the stratum-1 in test mode:
+
+    ```bash
+    cvmfs_server_container run 1 --test
+    ```
+    Thanks to the `--test` flag this copy is done automatically when starting the stratum-1 container.
+    In particular any `.pub` key found in the `cvmfs-stratum0/cvmfs-etc/keys` directory are copied to the `cvmfs-stratum1/cvmfs-etc/keys` one.
+    
+    Copy the public key of a single repo to the `cvmfs-stratum1` container.:
+
+    ```bash
+    cd /var/cvmfs-docker
+    cp stratum0/etc-cvmfs-keys/your.test.repo.name.pub stratum1/etc-cvmfs-keys/your.test.repo.name.pub
+    cd
+    ```
+
+9. Set the stratum-1 to be a replica of stratum-0. Note that the key path is the one local to the container itself.
+
+    ```bash
     cvmfs_server_container add-replica -o root http://cvmfs-stratum0:8000/cvmfs/your.test.repo.name /etc/cvmfs/keys/your.test.repo.name.pub
     ```
 

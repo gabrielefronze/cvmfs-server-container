@@ -7,6 +7,7 @@
 
 CVMFS_ROOT_DIR="$1"
 CVMFS_CONTAINER_IMAGE_NAME="$2"
+TEST="$3"
 
 mkdir -p "$CVMFS_ROOT_DIR"/var-spool-cvmfs
 mkdir "$CVMFS_ROOT_DIR"/cvmfs
@@ -23,6 +24,10 @@ docker run -d \
 --volume "$CVMFS_ROOT_DIR"/etc-cvmfs:/etc/cvmfs \
 --volume /sys/fs/cgroup:/sys/fs/cgroup \
 "$CVMFS_CONTAINER_IMAGE_NAME"
+
+if [[ "$TEST" == "true" ]]; then
+  cp "$CVMFS_ROOT_DIR"/../cvmfs-stratum0/etc-cvmfs/keys/*.pub "$CVMFS_ROOT_DIR"/etc-cvmfs/keys
+fi
 
 unset CVMFS_ROOT_DIR
 unset CVMFS_CONTAINER_IMAGE_NAME

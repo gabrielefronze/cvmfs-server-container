@@ -50,6 +50,13 @@ function prompt_stratum_selection {
     fi
 }
 
+function containsElement { 
+    for e in "${@:2}"; do
+        [[ "$e" == "$1" ]] && echo "found" && return; 
+    done; 
+    echo "not found"; 
+}
+
 function cvmfs_server_container {
     MODE=$1
 
@@ -351,8 +358,9 @@ function cvmfs_server_container {
             "transaction"|"publish")
                 REPO_LIST=($(docker exec -ti "$CVMFS_STRATUM_CONTAINER" cvmfs_server list | awk '{print $1}'))
                 REPO_LIST_LENGTH="${#REPO_LIST[@]}"
+                IS_REPO_VALID=$(containsElement "$CVMFS_REPO_NAME" "${REPO_LIST[@]}")
 
-                if [[ ${REPO_LIST[*]} =~ $(echo '\<"$CVMFS_REPO_NAME"\>') ]]; then
+                if [[ "$IS_REPO_VALID" == "found" ]]; then
                     docker exec -ti "$CVMFS_STRATUM_CONTAINER" cvmfs_server "$@"
                 elif [[ "$REPO_LIST_LENGTH" == 1 ]]; then
                     CVMFS_REPO_NAME="${REPO_LIST[0]}"

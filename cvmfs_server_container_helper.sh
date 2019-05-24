@@ -265,6 +265,9 @@ function cvmfs_server_container {
         unset REQUIRED_REPOS
         ;;
     get-keys-rpm)
+
+        echo "PIPPO"
+
         CVMFS_REPO_NAME="${@: -1}"
 
         REPO_LIST=($(docker exec -ti "$CVMFS_STRATUM_CONTAINER" cvmfs_server list | awk '{print $1}'))

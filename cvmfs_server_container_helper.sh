@@ -292,7 +292,9 @@ function cvmfs_server_container {
 
         OPTION="$2"
 
-        docker exec -ti "$CVMFS_STRATUM_CONTAINER" '"$RPM_STUFF_PATH"/build-keys-rpms.sh "$OPTION" "$CVMFS_REPO_NAME"'
+        BUILD_RPMS_COMMAND="$RPM_STUFF_PATH/build-keys-rpms.sh $OPTION $CVMFS_REPO_NAME"
+
+        docker exec -ti "$CVMFS_STRATUM_CONTAINER" "$BUILD_RPMS_COMMAND"
 
         unset RPM_STUFF_PATH
         unset CVMFS_REPO_NAME

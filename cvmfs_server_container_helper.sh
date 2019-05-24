@@ -264,6 +264,38 @@ function cvmfs_server_container {
         unset OPTIONS
         unset REQUIRED_REPOS
         ;;
+    get-keys-rpm)
+        CVMFS_REPO_NAME="${@: -1}"
+
+        REPO_LIST=($(docker exec -ti "$CVMFS_STRATUM_CONTAINER" cvmfs_server list | awk '{print $1}'))
+        REPO_LIST_LENGTH="${#REPO_LIST[@]}"
+        IS_REPO_VALID=$(containsElement "$CVMFS_REPO_NAME" "${REPO_LIST[@]}")
+
+        if [[ "$IS_REPO_VALID" == "found" ]]; then
+            docker exec -ti "$CVMFS_STRATUM_CONTAINER" cvmfs_server "$@"
+        elif [[ "$REPO_LIST_LENGTH" == 1 ]]; then
+            CVMFS_REPO_NAME="${REPO_LIST[0]}"
+            docker exec -ti "$CVMFS_STRATUM_CONTAINER" cvmfs_server "$@"
+        else
+            echo "FATAL: multiple repos available, but no one specified as argument. Aborting."
+            unset REPO_LIST
+            unset REPO_LIST_LENGTH
+            unset IS_REPO_VALID
+            unset CVMFS_REPO_NAME
+            return
+        fi
+
+        unset REPO_LIST
+        unset REPO_LIST_LENGTH
+        unset IS_REPO_VALID
+
+        OPTION="$2"
+
+        docker exec -ti "$CVMFS_STRATUM_CONTAINER" source "$RPM_STUFF_PATH"/build-keys-rpms.sh "$OPTION" "$CVMFS_REPO_NAME"
+
+        unset RPM_STUFF_PATH
+        unset CVMFS_REPO_NAME
+        ;;
     
     # Option to recover the required repo[s] using the internal script
     mount)
@@ -345,6 +377,11 @@ function cvmfs_server_container {
         echo "                  Mounts the specified repo or list of repos,"
         echo "                  automatically recovering them from crashes,"
         echo "                  container prunes and shutdowns."
+        echo "  get-keys-rpm    <--pub|--relman> [fully qualified repository name]"
+        echo "                  Generates a RPM package to distribute the repository keys."
+        echo "                  The --pub option packs the public key for the specified repository."
+        echo "                  The --relman option packs the .pub, .crt and .gw keys of the repository."
+        echo "                  The RPMs are made available in the host location of the cotnainer /etc/cvmfs/keys."
         docker exec -ti "$CVMFS_STRATUM_CONTAINER" cvmfs_server help | awk 'NR>5'| awk '!/^NOTE:/' | awk '!/^  mount/' | awk '!/^                  Mount/' | sed '/add-replica/,$!d'
         ;;
     

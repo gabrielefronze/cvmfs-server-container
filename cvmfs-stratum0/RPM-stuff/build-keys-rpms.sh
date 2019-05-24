@@ -1,10 +1,10 @@
 RPM_STUFF_PATH="~/RPM-stuff"
 
-CVMFS_REPO_NAME="$1"
+CVMFS_REPO_NAME="$2"
 
-source setup-rpmspecs.sh "$CVMFS_REPO_NAME"
+~/RPM-stuff/setup-rpmspecs.sh "$CVMFS_REPO_NAME"
 
-OPTION="$2"
+OPTION="$1"
         
 case "$OPTION" in
     "--pub")
@@ -27,7 +27,6 @@ case "$OPTION" in
         ;;
     *) 
         echo "FATAL: the second argument should be either --pub (public key export) or --relman (to export all the keys needed by Release Managers. Aborting."
-        return
         ;;
 esac
 

@@ -19,7 +19,7 @@ if [[ ! -d "$CVMFS_LOG_DIR" ]]; then
 fi
 
 function prompt_stratum_selection {
-    if [[ "$CVMFS_STRATUM_CONTAINER" == "dummy" ]]; then
+    if [[ "$CVMFS_STRATUM_CONTAINER" == "dummy" || -z "$CVMFS_STRATUM_CONTAINER" ]]; then
         if [[ $(docker ps | grep -c "cvmfs-stratum0") == 1 ]]; then
             if [[ $(docker ps | grep -c "cvmfs-stratum1") == 1 ]]; then
                 read -p "Both stratum0 and stratum1 are running. Please enter [0/1]: " strindex

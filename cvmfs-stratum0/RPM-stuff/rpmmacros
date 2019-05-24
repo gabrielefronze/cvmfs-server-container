@@ -1,0 +1,3 @@
+%_topdir %(echo $HOME)/cvmfs-packages
+%_smp_mflags -j3
+%debug_package %{nil}

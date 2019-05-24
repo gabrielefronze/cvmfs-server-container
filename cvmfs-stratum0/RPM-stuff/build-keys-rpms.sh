@@ -1,10 +1,9 @@
 RPM_STUFF_PATH="/root/RPM-stuff"
 
+OPTION="$1"
 CVMFS_REPO_NAME="$2"
 
 "$RPM_STUFF_PATH"/setup-rpmspecs.sh "$CVMFS_REPO_NAME"
-
-OPTION="$1"
         
 case "$OPTION" in
     "--pub")
@@ -26,7 +25,7 @@ case "$OPTION" in
         echo "The public key is available at /etc/cvmfs/keys/cvmfs-$CVMFS_REPO_NAME-relman-key-1-1.x86_64.rpm"
         ;;
     *) 
-        echo "FATAL: the second argument should be either --pub (public key export) or --relman (to export all the keys needed by Release Managers. Aborting."
+        echo "FATAL: the second argument should be either --pub (public key export) or --relman (to export all the keys needed by Release Managers). Aborting."
         ;;
 esac
 

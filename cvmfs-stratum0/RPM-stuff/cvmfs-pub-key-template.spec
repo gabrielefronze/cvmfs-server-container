@@ -18,7 +18,6 @@ mkdir -p %{buildroot}/etc/cvmfs/keys
 install -m 600 REPO_NAME_REPLACE_ME.pub %{buildroot}/etc/cvmfs/keys/REPO_NAME_REPLACE_ME.pub
 
 %files
-REPO_NAME_REPLACE_ME.pub
 
 %changelog
 # let's skip this for now

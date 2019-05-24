@@ -1,8 +1,8 @@
-RPM_STUFF_PATH="~/RPM-stuff"
+RPM_STUFF_PATH="/root/RPM-stuff"
 
 CVMFS_REPO_NAME="$2"
 
-~/RPM-stuff/setup-rpmspecs.sh "$CVMFS_REPO_NAME"
+"$RPM_STUFF_PATH"/setup-rpmspecs.sh "$CVMFS_REPO_NAME"
 
 OPTION="$1"
         
@@ -12,7 +12,7 @@ case "$OPTION" in
         source "$RPM_STUFF_PATH"/setup-rpmspecs.sh "$CVMFS_REPO_NAME"
         rpmbuild -ba "$RPM_STUFF_PATH"/cvmfs-pub-key-"$CVMFS_REPO_NAME".spec
         rm -f "$RPM_STUFF_PATH"/*"$CVMFS_REPO_NAME".spec
-        cp -f ~/rpmbuild/RPMS/x86_64/cvmfs-"$CVMFS_REPO_NAME"-pub-key-1-1.x86_64.rpm /etc/cvmfs/keys
+        cp -f /root/rpmbuild/RPMS/x86_64/cvmfs-"$CVMFS_REPO_NAME"-pub-key-1-1.x86_64.rpm /etc/cvmfs/keys
         echo "done"
         echo "The public key is available at /etc/cvmfs/keys/cvmfs-$CVMFS_REPO_NAME-pub-key-1-1.x86_64.rpm"
         ;;
@@ -21,7 +21,7 @@ case "$OPTION" in
         source "$RPM_STUFF_PATH"/setup-rpmspecs.sh "$CVMFS_REPO_NAME"
         rpmbuild -ba "$RPM_STUFF_PATH"/cvmfs-relman-key-"$CVMFS_REPO_NAME".spec
         rm -f "$RPM_STUFF_PATH"/*"$CVMFS_REPO_NAME".spec
-        cp -f ~/rpmbuild/RPMS/x86_64/cvmfs-"$CVMFS_REPO_NAME"-relman-key-1-1.x86_64.rpm /etc/cvmfs/keys
+        cp -f /root/rpmbuild/RPMS/x86_64/cvmfs-"$CVMFS_REPO_NAME"-relman-key-1-1.x86_64.rpm /etc/cvmfs/keys
         echo "done"
         echo "The public key is available at /etc/cvmfs/keys/cvmfs-$CVMFS_REPO_NAME-relman-key-1-1.x86_64.rpm"
         ;;

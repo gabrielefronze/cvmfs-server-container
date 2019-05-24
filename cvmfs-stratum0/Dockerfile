@@ -18,6 +18,8 @@ RUN systemctl enable cvmfs-gateway.service
 EXPOSE 80
 EXPOSE 4929
 
-RUN yum install -y rpminstall
+RUN yum install -y rpm-build rpmdevtools
+RUN rpmdev-setuptree
+ADD RPM-stuff ${HOME}/RPM-stuff
 
 CMD ["/usr/sbin/init"]

@@ -265,6 +265,7 @@ function cvmfs_server_container {
         unset REQUIRED_REPOS
         ;;
     get-keys-rpm)
+        prompt_stratum_selection
 
         echo "PIPPO"
 

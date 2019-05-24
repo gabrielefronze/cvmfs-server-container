@@ -21,5 +21,6 @@ EXPOSE 4929
 RUN yum install -y rpm-build rpmdevtools
 RUN rpmdev-setuptree
 ADD RPM-stuff ${HOME}/RPM-stuff
+RUN chmod +x ${HOME}/RPM-stuff/*.sh
 
 CMD ["/usr/sbin/init"]

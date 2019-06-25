@@ -50,9 +50,9 @@ case "$OPTION" in
 
         rpmbuild -ba "$RPM_STUFF_PATH"/cvmfs-conf-"$CVMFS_REPO_NAME".spec
         rm -f "$RPM_STUFF_PATH"/*"$CVMFS_REPO_NAME".spec
-        cp -f /root/rpmbuild/RPMS/x86_64/cvmfs-"$CVMFS_REPO_NAME"-relman-key-1-1.x86_64.rpm /etc/cvmfs/keys
+        cp -f /root/rpmbuild/RPMS/x86_64/cvmfs-"$CVMFS_REPO_NAME"-conf-1-1.x86_64.rpm /etc/cvmfs/keys
         echo "done"
-        echo "The public key is available at /etc/cvmfs/keys/cvmfs-$CVMFS_REPO_NAME-relman-key-1-1.x86_64.rpm"
+        echo "The public key is available at /etc/cvmfs/keys/cvmfs-$CVMFS_REPO_NAME-conf-1-1.x86_64.rpm"
         ;;
     *) 
         echo "FATAL: the second argument should be --pub (public key export), --relman (to export all the keys needed by Release Managers) or --conf to export client configuration. Aborting."

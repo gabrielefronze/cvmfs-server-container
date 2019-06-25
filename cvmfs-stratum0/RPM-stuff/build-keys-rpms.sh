@@ -43,10 +43,11 @@ case "$OPTION" in
             PROXY_FQN="DIRECT"
         fi
 
+        source "$RPM_STUFF_PATH"/setup-rpmspecs.sh "$CVMFS_REPO_NAME"
+
         sed -i "s/STRATUM1_FQN_REPLACE_ME/${STRATUM1_FQN}/g" "$RPM_STUFF_PATH"/cvmfs-conf-"$CVMFS_REPO_NAME".spec
         sed -i "s/PROXY_FQN_REPLACE_ME/${PROXY_FQN}/g" "$RPM_STUFF_PATH"/cvmfs-conf-"$CVMFS_REPO_NAME".spec
 
-        source "$RPM_STUFF_PATH"/setup-rpmspecs.sh "$CVMFS_REPO_NAME"
         rpmbuild -ba "$RPM_STUFF_PATH"/cvmfs-conf-"$CVMFS_REPO_NAME".spec
         rm -f "$RPM_STUFF_PATH"/*"$CVMFS_REPO_NAME".spec
         cp -f /root/rpmbuild/RPMS/x86_64/cvmfs-"$CVMFS_REPO_NAME"-relman-key-1-1.x86_64.rpm /etc/cvmfs/keys
@@ -54,7 +55,7 @@ case "$OPTION" in
         echo "The public key is available at /etc/cvmfs/keys/cvmfs-$CVMFS_REPO_NAME-relman-key-1-1.x86_64.rpm"
         ;;
     *) 
-        echo "FATAL: the second argument should be either --pub (public key export) or --relman (to export all the keys needed by Release Managers). Aborting."
+        echo "FATAL: the second argument should be --pub (public key export), --relman (to export all the keys needed by Release Managers) or --conf to export client configuration. Aborting."
         ;;
 esac
 

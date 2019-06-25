@@ -1,17 +1,19 @@
-COMMAND = "$1"
+COMMAND="$1"
 
 if [[ "$COMMAND" == "resign" || "$COMMAND" == "snapshot" ]]; then
+    REPO_NAME_ARRAY=$(ls /cvmfs/ | tr " " "\n")
 
-    REPO_LIST=($(cvmfs_server list | awk '{print $1}'))
-    REPO_LIST_LENGTH="${#REPO_LIST[@]}"
-
-    for REPO in "$REPOLIST"; do
-        echo "performing cvmfs_server $COMMAND $REPO"
+    for REPO in $REPO_NAME_ARRAY; do
+        TIMESTAMP=$(date -u)
+        echo -n "[$TIMESTAMP] performing cvmfs_server $COMMAND $REPO... "
         cvmfs_server "$COMMAND" "$REPO"
-
+    done
 else
-
-    echo "ERROR: This command is intended to be used just with resign or snapshot cvmfs commands."
-    return 1
-
+    TIMESTAMP=$(date -u)
+    echo "[$TIMESTAMP] ERROR: This command is intended to be used just with resign or snapshot cvmfs commands."
 fi
+
+unset COMMAND
+unset REPO_NAME_ARRAY
+unset TIMESTAMP
+unset REPO

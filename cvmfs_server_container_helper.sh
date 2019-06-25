@@ -267,7 +267,7 @@ function cvmfs_server_container {
     get-keys-rpm)
         prompt_stratum_selection
 
-        INPUT_CVMFS_REPO_NAME="${@: -1}"
+        INPUT_CVMFS_REPO_NAME="$3"
 
         REPO_LIST=($(docker exec -ti "$CVMFS_STRATUM_CONTAINER" cvmfs_server list | awk '{print $1}'))
         REPO_LIST_LENGTH="${#REPO_LIST[@]}"
@@ -294,7 +294,7 @@ function cvmfs_server_container {
 
         RPM_STUFF_PATH="/root/RPM-stuff"
 
-        echo "$RPM_STUFF_PATH"/build-keys-rpms.sh "$OPTION" "$CVMFS_REPO_NAME" "$3" "$4"
+        echo "$RPM_STUFF_PATH"/build-keys-rpms.sh "$OPTION" "$CVMFS_REPO_NAME" "$4" "$5"
 
         docker exec -ti "$CVMFS_STRATUM_CONTAINER" bash -c "$RPM_STUFF_PATH/build-keys-rpms.sh $OPTION $CVMFS_REPO_NAME"
 

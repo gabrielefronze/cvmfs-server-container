@@ -28,7 +28,7 @@ case "$OPTION" in
         echo -n "Exporting configuration file for $CVMFS_REPO_NAME... "
 
         STRATUM1_FQN=""
-        PROXY_FQN=""
+        PROXY_FQN="$3"
 
         if [[ ! -z $3 ]]; then
             STRATUM1_FQN="$3"
@@ -37,11 +37,6 @@ case "$OPTION" in
             return
         fi
 
-        if [[ ! -z $4 ]]; then
-            PROXY_FQN="$4"
-        else
-            PROXY_FQN="DIRECT"
-        fi
 
         source "$RPM_STUFF_PATH"/setup-rpmspecs.sh "$CVMFS_REPO_NAME"
 

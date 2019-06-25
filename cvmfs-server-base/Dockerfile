@@ -30,5 +30,7 @@ COPY cvmfs-httpd-conf.template /etc/cvmfs-scripts
 COPY cvmfs-fstab.template /etc/cvmfs-scripts
 RUN chmod +x /etc/cvmfs-scripts/restore-repo.sh
 
+COPY systemd-timers/* /etc/systemd/system/
+
 VOLUME [ “/sys/fs/cgroup” ]
 CMD ["/usr/sbin/init"]

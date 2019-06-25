@@ -294,7 +294,7 @@ function cvmfs_server_container {
 
         RPM_STUFF_PATH="/root/RPM-stuff"
 
-        echo "$RPM_STUFF_PATH"/build-keys-rpms.sh "$OPTION" "$CVMFS_REPO_NAME"
+        echo "$RPM_STUFF_PATH"/build-keys-rpms.sh "$OPTION" "$CVMFS_REPO_NAME" "$3" "$4"
 
         docker exec -ti "$CVMFS_STRATUM_CONTAINER" bash -c "$RPM_STUFF_PATH/build-keys-rpms.sh $OPTION $CVMFS_REPO_NAME"
 

@@ -3,6 +3,7 @@ Description=Calls the "cvmfs_server resign" command each month on a cvmfs stratu
  
 [Timer]
 Unit=cvmfs-resign.service
+OnBootSec=0min
 OnCalendar=*-*-01 00:00:00
 Persistent=true
  

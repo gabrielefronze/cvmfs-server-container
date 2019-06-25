@@ -294,6 +294,11 @@ function cvmfs_server_container {
 
         RPM_STUFF_PATH="/root/RPM-stuff"
 
+        if [[ -z "$4" && "$OPTION"=="--conf" ]]; then
+            echo "FATAL: please provide stratum 1 FQN or IP! Aborting... "
+            return
+        fi
+
         echo "$RPM_STUFF_PATH"/build-keys-rpms.sh "$OPTION" "$CVMFS_REPO_NAME" "$4" "$5"
 
         docker exec -ti "$CVMFS_STRATUM_CONTAINER" bash -c "$RPM_STUFF_PATH/build-keys-rpms.sh $OPTION $CVMFS_REPO_NAME $4 $5"

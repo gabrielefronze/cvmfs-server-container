@@ -11,7 +11,7 @@ This RPM handles the distribution of the configuration file for the REPO_NAME_RE
 # we have no source, so nothing here
 
 %build
-bash /root/RPM-stuff/echo-repo-conf.sh REPO_NAME_REPLACE_ME STRATUM1_FQN_REPLACE_ME PROXY_FQN_REPLACE_ME} > REPO_NAME_REPLACE_ME.conf
+bash /root/RPM-stuff/echo-repo-conf.sh REPO_NAME_REPLACE_ME STRATUM1_FQN_REPLACE_ME PROXY_FQN_REPLACE_ME > REPO_NAME_REPLACE_ME.conf
 
 %install
 mkdir -p %{buildroot}/etc/cvmfs/config.d

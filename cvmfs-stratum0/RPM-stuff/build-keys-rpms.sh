@@ -28,7 +28,7 @@ case "$OPTION" in
         echo -n "Exporting configuration file for $CVMFS_REPO_NAME... "
 
         STRATUM1_FQN=""
-        PROXY_FQN="$3"
+        PROXY_FQN="$4"
 
         if [[ ! -z $3 ]]; then
             STRATUM1_FQN="$3"

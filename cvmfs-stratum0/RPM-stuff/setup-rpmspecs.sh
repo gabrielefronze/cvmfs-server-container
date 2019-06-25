@@ -2,7 +2,7 @@ if [[ ! -z $1 ]]; then
     REPO_NAME=$1
     PUB_KEY_RPM_NAME=cvmfs-pub-key-"$REPO_NAME".spec
     RELMAN_KEY_RPM_NAME=cvmfs-relman-key-"$REPO_NAME".spec
-    CONF_RPM_NAME=cvmfs-conf-"$REPO_NAME".conf
+    CONF_RPM_NAME=cvmfs-conf-"$REPO_NAME".spec
 
     cd "$HOME"/RPM-stuff
     cp -f cvmfs-pub-key-template.spec "$PUB_KEY_RPM_NAME"

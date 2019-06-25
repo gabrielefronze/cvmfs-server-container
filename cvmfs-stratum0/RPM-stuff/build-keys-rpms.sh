@@ -30,14 +30,14 @@ case "$OPTION" in
         STRATUM1_FQN=""
         PROXY_FQN=""
 
-        if [[ ! -z $3]]; then
+        if [[ ! -z $3 ]]; then
             STRATUM1_FQN="$3"
         else
             echo "FATAL: please provide stratum 1 FQN! Aborting"
             return
         fi
 
-        if [[ ! -z $4]]; then
+        if [[ ! -z $4 ]]; then
             PROXY_FQN="$4"
         else
             PROXY_FQN="DIRECT"

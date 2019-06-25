@@ -388,10 +388,11 @@ function cvmfs_server_container {
         echo "                  Mounts the specified repo or list of repos,"
         echo "                  automatically recovering them from crashes,"
         echo "                  container prunes and shutdowns."
-        echo "  get-keys-rpm    <--pub|--relman> [fully qualified repository name]"
+        echo "  get-keys-rpm    <--pub|--relman|--conf> [fully qualified repository name]"
         echo "                  Generates a RPM package to distribute the repository keys."
         echo "                  The --pub option packs the public key for the specified repository."
         echo "                  The --relman option packs the .pub, .crt and .gw keys of the repository."
+        echo "                  The --conf option creates an .rpm with the .conf file to be installed at the clients."
         echo "                  The RPMs are made available in the host location of the cotnainer /etc/cvmfs/keys."
         docker exec -ti "$CVMFS_STRATUM_CONTAINER" cvmfs_server help | awk 'NR>5'| awk '!/^NOTE:/' | awk '!/^  mount/' | awk '!/^                  Mount/' | sed '/add-replica/,$!d'
         ;;

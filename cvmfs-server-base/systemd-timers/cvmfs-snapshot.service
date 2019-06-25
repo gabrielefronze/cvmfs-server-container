@@ -1,0 +1,15 @@
+[Unit]
+Description=Performs the "cvmfs_server snapshot"  command on all the handled repositories
+After=cvmfs.service
+
+[Service]
+Type=simple
+Restart=on-failure
+RestartSec=5
+StartLimitBurst=5
+StartLimitIntervalSec=25
+User=root
+ExecStart=./cvmfs-on-all-repos.sh snapshot
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,10 @@
+[Unit]
+Description=Calls the "cvmfs_server resign" command each month on a cvmfs stratum0
+ 
+[Timer]
+Unit=cvmfs-resign.service
+OnCalendar=*-*-01 00:00:00
+Persistent=true
+ 
+[Install]
+WantedBy=timers.target

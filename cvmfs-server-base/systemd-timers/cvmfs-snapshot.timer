@@ -1,0 +1,11 @@
+[Unit]
+Description=Calls the "cvmfs_server snapshot" command every 15 minutes on a cvmfs stratum1
+ 
+[Timer]
+Unit=cvmfs-snapshot.service
+OnUnitInactiveSec=15m
+AccuracySec=1s
+Persistent=true
+ 
+[Install]
+WantedBy=timers.target

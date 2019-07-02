@@ -1,7 +1,7 @@
 COMMAND="$1"
 
 if [[ "$COMMAND" == "resign" || "$COMMAND" == "snapshot" ]]; then
-    REPO_NAME_ARRAY=$(ls /cvmfs/ | tr " " "\n")
+    REPO_NAME_ARRAY=$(ls /srv/cvmfs/ | tr " " "\n" | sed "/info/d")
 
     for REPO in $REPO_NAME_ARRAY; do
         TIMESTAMP=$(date -u)

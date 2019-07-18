@@ -24,7 +24,7 @@ case "$OPTION" in
         echo "done"
         echo "The public key is available at /etc/cvmfs/keys/cvmfs-$CVMFS_REPO_NAME-relman-key-1-1.x86_64.rpm"
         ;;
-    "--conf")
+    "--client-conf")
         echo -n "Exporting configuration file for $CVMFS_REPO_NAME... "
 
         STRATUM1_FQN=""
@@ -50,7 +50,7 @@ case "$OPTION" in
         echo "The public key is available at /etc/cvmfs/keys/cvmfs-$CVMFS_REPO_NAME-conf-1-1.x86_64.rpm"
         ;;
     *) 
-        echo "FATAL: the second argument should be --pub (public key export), --relman (to export all the keys needed by Release Managers) or --conf to export client configuration. Aborting."
+        echo "FATAL: the second argument should be --pub (public key export), --relman (to export all the keys needed by Release Managers) or --client-conf (to export client configuration). Aborting."
         ;;
 esac
 

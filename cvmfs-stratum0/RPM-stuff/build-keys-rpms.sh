@@ -10,7 +10,6 @@ case "$OPTION" in
         echo -n "Exporting public key for repo $CVMFS_REPO_NAME... "
         source "$RPM_STUFF_PATH"/setup-rpmspecs.sh "$CVMFS_REPO_NAME"
         rpmbuild -ba "$RPM_STUFF_PATH"/cvmfs-pub-key-"$CVMFS_REPO_NAME".spec
-        rm -f "$RPM_STUFF_PATH"/*"$CVMFS_REPO_NAME".spec
         cp -f /root/rpmbuild/RPMS/x86_64/cvmfs-"$CVMFS_REPO_NAME"-pub-key-1-1.x86_64.rpm /etc/cvmfs/keys/cvmfs-"$CVMFS_REPO_NAME"-pub-key.rpm
         echo "done"
         echo "The public key is available at /etc/cvmfs/keys/cvmfs-$CVMFS_REPO_NAME-pub-key.rpm"
@@ -19,7 +18,6 @@ case "$OPTION" in
         echo -n "Exporting release manager keys set for $CVMFS_REPO_NAME... "
         source "$RPM_STUFF_PATH"/setup-rpmspecs.sh "$CVMFS_REPO_NAME"
         rpmbuild -ba "$RPM_STUFF_PATH"/cvmfs-relman-key-"$CVMFS_REPO_NAME".spec
-        rm -f "$RPM_STUFF_PATH"/*"$CVMFS_REPO_NAME".spec
         cp -f /root/rpmbuild/RPMS/x86_64/cvmfs-"$CVMFS_REPO_NAME"-relman-key-1-1.x86_64.rpm /etc/cvmfs/keys/cvmfs-"$CVMFS_REPO_NAME"-relman-key.rpm
         echo "done"
         echo "The release manager keys are available at /etc/cvmfs/keys/cvmfs-$CVMFS_REPO_NAME-relman-key.rpm"
@@ -43,7 +41,6 @@ case "$OPTION" in
         sed -i "s/PROXY_FQN_REPLACE_ME/${PROXY_FQN}/g" "$RPM_STUFF_PATH"/cvmfs-conf-"$CVMFS_REPO_NAME".spec
 
         rpmbuild -ba "$RPM_STUFF_PATH"/cvmfs-conf-"$CVMFS_REPO_NAME".spec
-        rm -f "$RPM_STUFF_PATH"/*"$CVMFS_REPO_NAME".spec
         cp -f /root/rpmbuild/RPMS/x86_64/cvmfs-"$CVMFS_REPO_NAME"-conf-1-1.x86_64.rpm /etc/cvmfs/keys/cvmfs-"$CVMFS_REPO_NAME"-conf.rpm
         echo "done"
         echo "The configuration package is available at /etc/cvmfs/keys/cvmfs-$CVMFS_REPO_NAME-conf.rpm"
@@ -63,7 +60,6 @@ case "$OPTION" in
         sed -i "s/STRATUM0_FQN_REPLACE_ME/${STRATUM0_FQN}/g" "$RPM_STUFF_PATH"/cvmfs-add-replica-"$CVMFS_REPO_NAME".spec
 
         rpmbuild -ba "$RPM_STUFF_PATH"/cvmfs-add-replica-"$CVMFS_REPO_NAME".spec
-        rm -f "$RPM_STUFF_PATH"/*"$CVMFS_REPO_NAME".spec
         cp -f /root/rpmbuild/RPMS/x86_64/cvmfs-"$CVMFS_REPO_NAME"-add-replica-1-1.x86_64.rpm /etc/cvmfs/keys/cvmfs-"$CVMFS_REPO_NAME"-add-replica.rpm
 
         echo "done"
